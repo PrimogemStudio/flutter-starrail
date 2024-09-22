@@ -97,8 +97,8 @@ class ChatMainPageState extends State<ChatMainPage> {
             Stack(
               alignment: Alignment.topRight,
               children: [
-                RoundedRect(width: 3, height: _height, radius: 16, color: Colors.black), 
-                Positioned(top: _offset, child: RoundedRect(width: 4, height: _schHeight, radius: 16, color: Colors.red))
+                RoundedRect(width: 2, height: _height, radius: 0, color: Color.fromARGB(255, 185, 185, 185)), 
+                Positioned(top: _offset, child: RoundedRect(width: 2, height: _schHeight, radius: 0, color: Color.fromARGB(255, 95, 95, 95)))
               ],
             ), 
             const Icon(Icons.keyboard_arrow_down, size: 14)
