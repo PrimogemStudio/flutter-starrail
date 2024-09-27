@@ -155,7 +155,7 @@ class ChatMessageLineState extends State<ChatMessageLine> with TickerProviderSta
             ),
             Stack(textDirection: widget.self ? TextDirection.rtl : TextDirection.ltr, children: [
               FadeTransition(opacity: widget.animation!, child: msgMain), 
-              widget.msgResv ? FadeTransition(opacity: widget.msgAnimation!, child: msgMain2) : Container()
+              FadeTransition(opacity: widget.msgAnimation!, child: msgMain2)
             ])
           ],
         ))
