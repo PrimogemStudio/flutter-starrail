@@ -54,7 +54,7 @@ class ChatMainPageState extends State<ChatMainPage> {
           var maxScrollExtent = _controller.position.maxScrollExtent;
           var pixels = _controller.offset;
 
-          _height = extentInside - 78;
+          _height = extentInside - 30;
           _schHeight = _height * (extentInside / (extentInside + maxScrollExtent));
           _offset = (_height - _schHeight) * (pixels / maxScrollExtent);
           if (_offset.isNaN) { _offset = 0; }
@@ -90,15 +90,13 @@ class ChatMainPageState extends State<ChatMainPage> {
     );
 
     var bar = Column(children: [
-            const Icon(Icons.keyboard_arrow_up, size: 14), 
             Stack(
               alignment: Alignment.topRight,
               children: [
-                RoundedRect(width: 2.2, height: _height, radius: 0, color: const Color.fromARGB(255, 185, 185, 185)), 
-                Positioned(top: _offset, child: RoundedRect(width: 2.2, height: _schHeight, radius: 0, color: const Color.fromARGB(255, 95, 95, 95)))
+                RoundedRect(width: 4, height: _height, radius: 0, color: const Color.fromARGB(255, 185, 185, 185)), 
+                Positioned(top: _offset, child: RoundedRect(width: 4, height: _schHeight, radius: 0, color: const Color.fromARGB(255, 95, 95, 95)))
               ],
-            ), 
-            const Icon(Icons.keyboard_arrow_down, size: 14)
+            )
           ]);
 
     Scaffold sc = Scaffold(
@@ -119,7 +117,7 @@ class ChatMainPageState extends State<ChatMainPage> {
             left: 10, right: 10, top: 10, bottom: 20
           ), child: Listener(
               child: bar, 
-              onPointerMove: (e) { targetOff = - (dragOff!.dy - e.localPosition.dy) + currOff; }, 
+              onPointerMove: (e) { targetOff = (e.localPosition.dy - dragOff!.dy) + currOff; }, 
               onPointerDown: (e) { dragOff = e.localPosition; currOff = _controller.offset; targetOff = currOff; dragging = e.buttons == 1; }, 
               onPointerUp: (e) { dragging = false; }
             ))
