@@ -17,8 +17,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false, 
       theme: ThemeData(
         colorScheme: const ColorScheme.light(
-          surface: Color.fromARGB(255, 235, 235, 235), 
-          // primary: Color.fromARGB(255, 235, 235, 235)
+          surface: Color.fromARGB(255, 235, 235, 235)
         ), 
         useMaterial3: true,
         fontFamily: "StarRailFont"
