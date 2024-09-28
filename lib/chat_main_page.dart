@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 import 'chat_header.dart';
 import 'chat_message_line.dart';
@@ -43,7 +44,6 @@ class ChatMainPageState extends State<ChatMainPage> {
   double _height = 0;
   double _schHeight = 0;
   double _po = 1;
-  double _rawOffset = 0;
 
   @override
   void initState() { 
@@ -68,6 +68,24 @@ class ChatMainPageState extends State<ChatMainPage> {
       WidgetsBinding.instance.addPostFrameCallback(c);
     };
     WidgetsBinding.instance.addPostFrameCallback(c);
+
+    _controller.addListener(() {
+      var scrollDirection = _controller.position.userScrollDirection;
+      if (scrollDirection != ScrollDirection.idle)
+      {
+        double scrollEnd = _controller.offset + (scrollDirection == ScrollDirection.reverse
+                       ? 20
+                       : -20);
+        print(_controller.position.minScrollExtent);
+        print(_controller.offset);
+        print(scrollEnd);
+        print(_controller.position.maxScrollExtent);
+        /*scrollEnd = max(
+                 _controller.position.maxScrollExtent,
+                 min(_controller.position.minScrollExtent, scrollEnd));*/
+        _controller.jumpTo(scrollEnd);
+      }
+    });
   }
 
   void scrollToBottom() {
@@ -128,7 +146,7 @@ class ChatMainPageState extends State<ChatMainPage> {
                     )
                   ]), 
                   onPointerDown: (e) {
-                    _controller.animateTo(e.localPosition.dy / _height * (_height - _schHeight) * _po, duration: const Duration(milliseconds: 500), curve: Curves.easeOutCirc);
+                    _controller.jumpTo(e.localPosition.dy / _height * (_height - _schHeight) * _po);
                   },
                 ))
         ],
