@@ -116,7 +116,13 @@ class ChatMainPageState extends State<ChatMainPage> {
         alignment: Alignment.topRight,
         children: [
           Column(children: [
-            Expanded(child: ScrollConfiguration(behavior: const ScrollBehavior().copyWith(scrollbars: false), child: view!)), 
+            Expanded(child: ScrollConfiguration(behavior: const ScrollBehavior().copyWith(scrollbars: false), child: Listener(
+              child: view!, 
+              onPointerMove: (e){ print("Move!"); }, 
+              onPointerUp: (e){ print("Up!"); }, 
+              onPointerDown: (e){ print("Down!"); }
+              )
+            )), 
             const Padding(padding: EdgeInsets.only(top: 0)),
           ]), 
           Padding(padding: const EdgeInsets.only(
