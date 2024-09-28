@@ -79,9 +79,11 @@ class ChatMainPageState extends State<ChatMainPage> {
       SchedulerBinding.instance.addPostFrameCallback((Duration d) {
         setState(() {
           if (_controller.positions.isEmpty) return;
-          var extentInside = _controller.position.extentInside;
+          var extentInside = key.currentContext!.size!.height;
           var maxScrollExtent = _controller.position.maxScrollExtent;
           var pixels = _controller.offset;
+
+          print(key.currentContext!.size);
 
           _height = extentInside - 78;
           _schHeight = _height * (extentInside / (extentInside + maxScrollExtent));
@@ -101,9 +103,11 @@ class ChatMainPageState extends State<ChatMainPage> {
     });
   }
 
+  Offset? dragOff;
+
   @override
   Widget build(BuildContext context) {
-    view = AnimatedList(key: key, initialItemCount: list.length, 
+    view = AnimatedList(key: key, initialItemCount: list.length, physics: const BouncingScrollPhysics(),
       itemBuilder: (context, index, animation) {
         ((list[index] as ListTile).title as ChatMessageLine).animation = animation;
         return list[index];
@@ -118,9 +122,8 @@ class ChatMainPageState extends State<ChatMainPage> {
           Column(children: [
             Expanded(child: ScrollConfiguration(behavior: const ScrollBehavior().copyWith(scrollbars: false), child: Listener(
               child: view!, 
-              onPointerMove: (e){ print("Move! ${e.localPosition}"); _controller.jumpTo(e.localPosition.dy); }, 
-              onPointerUp: (e){ print("Up!"); }, 
-              onPointerDown: (e){ print("Down!"); }
+              onPointerMove: (e) { _controller.jumpTo((dragOff!.dy - e.localPosition.dy) / 40 + _controller.offset); }, 
+              onPointerDown: (e) { dragOff = e.localPosition; }
               )
             )), 
             const Padding(padding: EdgeInsets.only(top: 0)),
