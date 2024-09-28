@@ -91,12 +91,24 @@ class ChatMainPageState extends State<ChatMainPage> {
       controller: _controller, physics: const BouncingScrollPhysics(),
     );
 
+    var innerBar = Listener(
+              child: RoundedRect(width: 4, height: _schHeight, radius: 0, color: const Color.fromARGB(255, 95, 95, 95)), 
+              onPointerMove: (e) { targetOff = (e.localPosition.dy - dragOff!.dy) * _po + currOff; }, 
+              onPointerDown: (e) { dragOff = e.localPosition; currOff = _controller.offset; targetOff = currOff; dragging = e.buttons == 1; }, 
+              onPointerUp: (e) { dragging = false; }
+            );
+
     var bar = Column(children: [
             Stack(
               alignment: Alignment.topRight,
               children: [
-                RoundedRect(width: 4, height: _height, radius: 0, color: const Color.fromARGB(255, 185, 185, 185)), 
-                Positioned(top: _offset, child: RoundedRect(width: 4, height: _schHeight, radius: 0, color: const Color.fromARGB(255, 95, 95, 95)))
+                Listener(
+                  child: RoundedRect(width: 4, height: _height, radius: 0, color: const Color.fromARGB(255, 185, 185, 185)), 
+                  onPointerDown: (e) {
+                    print(e.localPosition);
+                  },
+                ), 
+                Positioned(top: _offset, child: innerBar)
               ],
             )
           ]);
@@ -117,12 +129,7 @@ class ChatMainPageState extends State<ChatMainPage> {
           ]), 
           Padding(padding: const EdgeInsets.only(
             left: 10, right: 10, top: 10, bottom: 20
-          ), child: Listener(
-              child: bar, 
-              onPointerMove: (e) { targetOff = (e.localPosition.dy - dragOff!.dy) * _po + currOff; }, 
-              onPointerDown: (e) { dragOff = e.localPosition; currOff = _controller.offset; targetOff = currOff; dragging = e.buttons == 1; }, 
-              onPointerUp: (e) { dragging = false; }
-            ))
+          ), child: bar)
         ],
       ), 
       appBar: AppBar(
