@@ -95,8 +95,8 @@ class ChatMessageLineState extends State<ChatMessageLine> with TickerProviderSta
               color: const Color.fromARGB(255, 184, 184, 184),
               margin: widget.self ? const EdgeInsets.fromLTRB(0, 0, 10, 5) : const EdgeInsets.fromLTRB(10, 5, 0, 0),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(
-                topLeft: widget.self ? const Radius.circular(10) : const Radius.circular(5), 
-                topRight: widget.self ? const Radius.circular(5) : const Radius.circular(10), 
+                topLeft: widget.self ? const Radius.circular(10) : const Radius.circular(0), 
+                topRight: widget.self ? const Radius.circular(0) : const Radius.circular(10), 
                 bottomLeft: const Radius.circular(10), 
                 bottomRight: const Radius.circular(11.5)
               )),
@@ -104,8 +104,8 @@ class ChatMessageLineState extends State<ChatMessageLine> with TickerProviderSta
                 elevation: 0,
                 color: const Color.fromARGB(255, 253, 253, 253),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(
-                  topLeft: widget.self ? const Radius.circular(10) : const Radius.circular(5), 
-                  topRight: widget.self ? const Radius.circular(5) : const Radius.circular(10), 
+                  topLeft: widget.self ? const Radius.circular(10) : const Radius.circular(0), 
+                  topRight: widget.self ? const Radius.circular(0) : const Radius.circular(10), 
                   bottomLeft: const Radius.circular(10), 
                   bottomRight: const Radius.circular(10)
                 )),
