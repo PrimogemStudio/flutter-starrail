@@ -118,7 +118,7 @@ class ChatMainPageState extends State<ChatMainPage> {
           Column(children: [
             Expanded(child: ScrollConfiguration(behavior: const ScrollBehavior().copyWith(scrollbars: false), child: Listener(
               child: view!, 
-              onPointerMove: (e){ print("Move!"); }, 
+              onPointerMove: (e){ print("Move! ${e.localPosition}"); _controller.jumpTo(e.localPosition.dy); }, 
               onPointerUp: (e){ print("Up!"); }, 
               onPointerDown: (e){ print("Down!"); }
               )
