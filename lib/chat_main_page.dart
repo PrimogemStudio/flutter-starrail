@@ -87,6 +87,7 @@ class ChatMainPageState extends State<ChatMainPage> {
           _schHeight = _height * (extentInside / (extentInside + maxScrollExtent));
           _offset = (_height - _schHeight) * (pixels / maxScrollExtent);
           if (_offset.isNaN) { _offset = 0; }
+          if (dragging) { _controller.jumpTo(targetOff); }
         });
       });
       WidgetsBinding.instance.addPostFrameCallback(c);
@@ -103,6 +104,8 @@ class ChatMainPageState extends State<ChatMainPage> {
 
   Offset? dragOff;
   double currOff = 0;
+  bool dragging = false;
+  double targetOff = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -121,8 +124,9 @@ class ChatMainPageState extends State<ChatMainPage> {
           Column(children: [
             Expanded(child: ScrollConfiguration(behavior: const ScrollBehavior().copyWith(scrollbars: false), child: Listener(
               child: view!, 
-              onPointerMove: (e) { _controller.jumpTo((dragOff!.dy - e.localPosition.dy) + currOff); }, 
-              onPointerDown: (e) { dragOff = e.localPosition; currOff = _controller.offset; }
+              onPointerMove: (e) { targetOff = (dragOff!.dy - e.localPosition.dy) / 2 + currOff; }, 
+              onPointerDown: (e) { dragOff = e.localPosition; currOff = _controller.offset; targetOff = currOff; dragging = true; }, 
+              onPointerUp: (e) { dragging = false; }
               )
             )), 
             const Padding(padding: EdgeInsets.only(top: 0)),
