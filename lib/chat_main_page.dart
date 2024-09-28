@@ -36,6 +36,35 @@ class ChatMainPageState extends State<ChatMainPage> {
       key.currentState!.insertItem(list.length - 1);
       scrollToBottom();
     });
+
+     showDialog(context: context,
+           builder: (context) {
+              return AlertDialog(
+                 title: const Text("添加测试消息"),
+                 content: const Text("这是一个AlertDialog示例"),
+                 actions: [
+                   TextButton(
+                     onPressed: () {
+                       Navigator.of(context).pop();
+                     },
+                     style: ButtonStyle(
+                      foregroundColor: WidgetStateProperty.all<Color>(Colors.red),
+                      ),
+                     child: const Text("取消"),
+                   ),
+                   TextButton(
+                     onPressed: () {
+                       Navigator.of(context).pop();
+                     },
+                     style: ButtonStyle(
+                      foregroundColor: WidgetStateProperty.all<Color>(Colors.blue),
+                      ),
+                     child: const Text("确定"),
+                   )
+                 ],
+               );
+           }
+       );
   }
 
   double _offset = 0;
