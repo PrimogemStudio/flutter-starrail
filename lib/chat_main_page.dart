@@ -77,6 +77,7 @@ class ChatMainPageState extends State<ChatMainPage> {
                        ? -50
                        : 50);
         if (_controller.offset == _controller.position.minScrollExtent || _controller.offset == _controller.position.maxScrollExtent) return;
+        dragging = false;
         _controller.jumpTo(scrollEnd);
       }
     });
