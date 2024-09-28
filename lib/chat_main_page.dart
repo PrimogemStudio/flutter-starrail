@@ -19,6 +19,7 @@ class ChatMainPageState extends State<ChatMainPage> {
   AnimatedList? view;
   final ScrollController _controller = ScrollController();
   GlobalKey<AnimatedListState> key = GlobalKey<AnimatedListState>();
+  GlobalKey barKey = GlobalKey();
 
   void addMsg() {
     ListTile tt = ListTile(title: ChatMessageLine(
@@ -42,6 +43,7 @@ class ChatMainPageState extends State<ChatMainPage> {
   double _height = 0;
   double _schHeight = 0;
   double _po = 1;
+  double _rawOffset = 0;
 
   @override
   void initState() { 
@@ -97,21 +99,7 @@ class ChatMainPageState extends State<ChatMainPage> {
               onPointerDown: (e) { dragOff = e.localPosition; currOff = _controller.offset; targetOff = currOff; dragging = e.buttons == 1; }, 
               onPointerUp: (e) { dragging = false; }
             );
-
-    var bar = Column(children: [
-            Stack(
-              alignment: Alignment.topRight,
-              children: [
-                Listener(
-                  child: RoundedRect(width: 4, height: _height, radius: 0, color: const Color.fromARGB(255, 185, 185, 185)), 
-                  onPointerDown: (e) {
-                    print(e.localPosition);
-                  },
-                ), 
-                Positioned(top: _offset, child: innerBar)
-              ],
-            )
-          ]);
+    var barBg = RoundedRect(key: barKey, width: 4, height: _height, radius: 0, color: const Color.fromARGB(255, 185, 185, 185));
 
     Scaffold sc = Scaffold(
       body: Stack(
@@ -129,7 +117,20 @@ class ChatMainPageState extends State<ChatMainPage> {
           ]), 
           Padding(padding: const EdgeInsets.only(
             left: 10, right: 10, top: 10, bottom: 20
-          ), child: bar)
+          ), child: Listener(
+                  child: Column(children: [
+                    Stack(
+                      alignment: Alignment.topRight,
+                      children: [
+                        barBg, 
+                        Positioned(top: _offset, child: innerBar)
+                      ],
+                    )
+                  ]), 
+                  onPointerDown: (e) {
+                    _controller.animateTo(e.localPosition.dy / _height * (_height - _schHeight) * _po, duration: const Duration(milliseconds: 500), curve: Curves.easeOutCirc);
+                  },
+                ))
         ],
       ), 
       appBar: AppBar(
