@@ -37,11 +37,11 @@ class ChatMainPageState extends State<ChatMainPage> {
       scrollToBottom();
     });
 
-     showDialog(context: context,
+    /*showDialog(context: context,
            builder: (context) {
               return AlertDialog(
                  title: const Text("添加测试消息"),
-                 content: const Text("这是一个AlertDialog示例"),
+                 content: TextField(), 
                  actions: [
                    TextButton(
                      onPressed: () {
@@ -64,7 +64,7 @@ class ChatMainPageState extends State<ChatMainPage> {
                  ],
                );
            }
-       );
+       );*/
   }
 
   double _offset = 0;
@@ -137,14 +137,16 @@ class ChatMainPageState extends State<ChatMainPage> {
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 235, 235, 235), // Theme.of(context).colorScheme.inversePrimary,
         shadowColor: const Color.fromARGB(255, 255, 255, 255),
-        elevation: 1.0,
+        elevation: 0,
         title: ChatHeader(), 
-        scrolledUnderElevation: 5.0
+        scrolledUnderElevation: 3.0, 
+        surfaceTintColor: Colors.transparent, 
+        bottom: PreferredSize(preferredSize: const Size(1, 1), child: Container(width: 2147483647, height: 1, color: const Color.fromARGB(125, 155, 155, 155))),
       ),
       floatingActionButton: FloatingActionButton(
           onPressed: addMsg,
           tooltip: '添加测试信息',
-          child: const Icon(Icons.add, color: Colors.black),
+          child: const Icon(Icons.add),
         )
     );
     return ClipRRect(borderRadius: const BorderRadius.only(
