@@ -56,7 +56,7 @@ class ChatMainPageState extends State<ChatMainPage> {
           var offset = _controller.offset;
 
           _height = extentInside - 30;
-          _po = extentInside / (extentInside + maxScrollExtent);
+          _po = (extentInside + maxScrollExtent) / extentInside / _height * extentInside;
           _schHeight = _height * (extentInside / (extentInside + maxScrollExtent));
           _offset = (_height - _schHeight) * (offset / maxScrollExtent);
           if (_offset.isNaN) { _offset = 0; }
@@ -119,9 +119,7 @@ class ChatMainPageState extends State<ChatMainPage> {
             left: 10, right: 10, top: 10, bottom: 20
           ), child: Listener(
               child: bar, 
-              onPointerMove: (e) { 
-                targetOff = (e.localPosition.dy - dragOff!.dy) / _po + currOff; 
-              }, 
+              onPointerMove: (e) { targetOff = (e.localPosition.dy - dragOff!.dy) * _po + currOff; }, 
               onPointerDown: (e) { dragOff = e.localPosition; currOff = _controller.offset; targetOff = currOff; dragging = e.buttons == 1; }, 
               onPointerUp: (e) { dragging = false; }
             ))
