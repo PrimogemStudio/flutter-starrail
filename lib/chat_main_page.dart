@@ -125,7 +125,7 @@ class ChatMainPageState extends State<ChatMainPage> {
             Expanded(child: ScrollConfiguration(behavior: const ScrollBehavior().copyWith(scrollbars: false), child: Listener(
               child: view!, 
               onPointerMove: (e) { targetOff = (dragOff!.dy - e.localPosition.dy) / 2 + currOff; }, 
-              onPointerDown: (e) { dragOff = e.localPosition; currOff = _controller.offset; targetOff = currOff; dragging = true; }, 
+              onPointerDown: (e) { dragOff = e.localPosition; currOff = _controller.offset; targetOff = currOff; dragging = e.buttons == 1; }, 
               onPointerUp: (e) { dragging = false; }
               )
             )), 
