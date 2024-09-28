@@ -74,15 +74,9 @@ class ChatMainPageState extends State<ChatMainPage> {
       if (scrollDirection != ScrollDirection.idle)
       {
         double scrollEnd = _controller.offset + (scrollDirection == ScrollDirection.reverse
-                       ? 20
-                       : -20);
-        print(_controller.position.minScrollExtent);
-        print(_controller.offset);
-        print(scrollEnd);
-        print(_controller.position.maxScrollExtent);
-        /*scrollEnd = max(
-                 _controller.position.maxScrollExtent,
-                 min(_controller.position.minScrollExtent, scrollEnd));*/
+                       ? -50
+                       : 50);
+        if (_controller.offset == _controller.position.minScrollExtent || _controller.offset == _controller.position.maxScrollExtent) return;
         _controller.jumpTo(scrollEnd);
       }
     });
@@ -147,6 +141,7 @@ class ChatMainPageState extends State<ChatMainPage> {
                   ]), 
                   onPointerDown: (e) {
                     _controller.jumpTo(e.localPosition.dy / _height * (_height - _schHeight) * _po);
+                    dragOff = e.localPosition; currOff = _controller.offset; targetOff = currOff; dragging = e.buttons == 1;
                   },
                 ))
         ],
