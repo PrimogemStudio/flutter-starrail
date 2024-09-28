@@ -140,9 +140,12 @@ class ChatMainPageState extends State<ChatMainPage> {
                       ],
                     )
                   ]), 
+                  onPointerMove: (e) { targetOff = (e.localPosition.dy - dragOff!.dy) * _po + currOff; }, 
+                  onPointerUp: (e) { dragging = false; }, 
                   onPointerDown: (e) {
                     _controller.jumpTo(e.localPosition.dy / _height * (_height - _schHeight) * _po);
                     dragOff = e.localPosition; currOff = _controller.offset; targetOff = currOff; dragging = e.buttons == 1;
+                    dragging = true;
                   },
                 ))
         ],
