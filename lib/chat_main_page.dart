@@ -36,35 +36,6 @@ class ChatMainPageState extends State<ChatMainPage> {
       key.currentState!.insertItem(list.length - 1);
       scrollToBottom();
     });
-
-    /*showDialog(context: context,
-           builder: (context) {
-              return AlertDialog(
-                 title: const Text("添加测试消息"),
-                 content: TextField(), 
-                 actions: [
-                   TextButton(
-                     onPressed: () {
-                       Navigator.of(context).pop();
-                     },
-                     style: ButtonStyle(
-                      foregroundColor: WidgetStateProperty.all<Color>(Colors.red),
-                      ),
-                     child: const Text("取消"),
-                   ),
-                   TextButton(
-                     onPressed: () {
-                       Navigator.of(context).pop();
-                     },
-                     style: ButtonStyle(
-                      foregroundColor: WidgetStateProperty.all<Color>(Colors.blue),
-                      ),
-                     child: const Text("确定"),
-                   )
-                 ],
-               );
-           }
-       );*/
   }
 
   double _offset = 0;
@@ -106,34 +77,19 @@ class ChatMainPageState extends State<ChatMainPage> {
   double currOff = 0;
   bool dragging = false;
   double targetOff = 0;
+  double tt = 0;
 
   @override
   Widget build(BuildContext context) {
-    view = AnimatedList(key: key, initialItemCount: list.length, physics: const BouncingScrollPhysics(),
+    view = AnimatedList(key: key, initialItemCount: list.length, 
       itemBuilder: (context, index, animation) {
         ((list[index] as ListTile).title as ChatMessageLine).animation = animation;
         return list[index];
       }, 
-      controller: _controller, // physics: const BouncingScrollPhysics(),
+      controller: _controller, physics: const BouncingScrollPhysics(),
     );
 
-    Scaffold sc = Scaffold(
-      body: Stack(
-        alignment: Alignment.topRight,
-        children: [
-          Column(children: [
-            Expanded(child: ScrollConfiguration(behavior: const ScrollBehavior().copyWith(scrollbars: false), child: Listener(
-              child: view!, 
-              onPointerMove: (e) { targetOff = (dragOff!.dy - e.localPosition.dy) / 2 + currOff; }, 
-              onPointerDown: (e) { dragOff = e.localPosition; currOff = _controller.offset; targetOff = currOff; dragging = e.buttons == 1; }, 
-              onPointerUp: (e) { dragging = false; }
-              )
-            )), 
-            const Padding(padding: EdgeInsets.only(top: 0)),
-          ]), 
-          Padding(padding: const EdgeInsets.only(
-            left: 10, right: 10, top: 10, bottom: 20
-          ), child: Column(children: [
+    var bar = Column(children: [
             const Icon(Icons.keyboard_arrow_up, size: 14), 
             Stack(
               alignment: Alignment.topRight,
@@ -143,7 +99,30 @@ class ChatMainPageState extends State<ChatMainPage> {
               ],
             ), 
             const Icon(Icons.keyboard_arrow_down, size: 14)
-          ]))
+          ]);
+
+    Scaffold sc = Scaffold(
+      body: Stack(
+        alignment: Alignment.topRight,
+        children: [
+          Column(children: [
+            Expanded(child: ScrollConfiguration(behavior: const ScrollBehavior().copyWith(scrollbars: false), child: Listener(
+              child: view!, 
+              onPointerMove: (e) { targetOff = (dragOff!.dy - e.localPosition.dy) + currOff; }, 
+              onPointerDown: (e) { dragOff = e.localPosition; currOff = _controller.offset; targetOff = currOff; dragging = e.buttons == 1; }, 
+              onPointerUp: (e) { dragging = false; }
+              )
+            )), 
+            Padding(padding: EdgeInsets.only(top: tt)),
+          ]), 
+          Padding(padding: const EdgeInsets.only(
+            left: 10, right: 10, top: 10, bottom: 20
+          ), child: Listener(
+              child: bar, 
+              onPointerMove: (e) { targetOff = - (dragOff!.dy - e.localPosition.dy) + currOff; }, 
+              onPointerDown: (e) { dragOff = e.localPosition; currOff = _controller.offset; targetOff = currOff; dragging = e.buttons == 1; }, 
+              onPointerUp: (e) { dragging = false; }
+            ))
         ],
       ), 
       appBar: AppBar(
