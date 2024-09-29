@@ -5,6 +5,7 @@
 #include <sstream>
 #include <thread>
 #include <flutter/standard_method_codec.h>
+#include <flutter/method_result_functions.h>
 
 #include "flutter/generated_plugin_registrant.h"
 
@@ -56,7 +57,10 @@ bool FlutterWindow::OnCreate() {
 		while (true)
 		{
 			std::this_thread::sleep_for(std::chrono::seconds(3));
-			channel->InvokeMethod("addMsg", std::make_unique<EncodableValue>("Platform message " + format_time()));
+			channel->InvokeMethod("addMsg", std::make_unique<EncodableValue>("Platform message " + format_time()), std::make_unique<MethodResultFunctions<>>([](const EncodableValue* result)
+			{
+				std::cout << std::get<int>(*result) << std::endl;
+			}, nullptr, nullptr));
 		}
 	}).detach();
 	return true;

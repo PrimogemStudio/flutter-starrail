@@ -45,7 +45,7 @@ class ChatMainPageState extends State<ChatMainPage> {
           });
           break;
       }
-      return 1;
+      return Random().nextInt(5);
     });
   }
 
