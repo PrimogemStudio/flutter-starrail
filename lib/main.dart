@@ -14,14 +14,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      debugShowCheckedModeBanner: false, 
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: const ColorScheme.light(
-          surface: Color.fromARGB(255, 235, 235, 235)
-        ), 
-        useMaterial3: true,
-        fontFamily: "StarRailFont"
-      ),
+          colorScheme: const ColorScheme.light(
+              surface: Color.fromARGB(255, 235, 235, 235)),
+          useMaterial3: true,
+          fontFamily: "StarRailFont"),
       home: const ChatMainPage(),
     );
   }

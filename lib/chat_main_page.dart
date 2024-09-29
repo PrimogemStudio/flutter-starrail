@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter/services.dart';
 import 'chat_header.dart';
 import 'chat_message_line.dart';
 import 'packs/rounded_rect.dart';
@@ -22,18 +23,44 @@ class ChatMainPageState extends State<ChatMainPage> {
   GlobalKey<AnimatedListState> key = GlobalKey<AnimatedListState>();
   GlobalKey barKey = GlobalKey();
 
+  ChatMainPageState() {
+    const MethodChannel('MainPage.Event').setMethodCallHandler((call) async {
+      switch (call.method) {
+        case "addMsg":
+          final msg = call.arguments as String;
+          ListTile tt = ListTile(
+              title: ChatMessageLine(
+                  avatar: Image.asset("assets/avatars/jack253-png.png",
+                      width: 50.0, height: 50.0),
+                  self: false,
+                  username: "Coder2",
+                  text: msg,
+                  msgResv: false,
+                  onLoadComplete: () => scrollToBottom()));
+
+          setState(() {
+            list.add(tt);
+            key.currentState!.insertItem(list.length - 1);
+            scrollToBottom();
+          });
+          break;
+      }
+      return 1;
+    });
+  }
+
   void addMsg() {
-    ListTile tt = ListTile(title: ChatMessageLine(
-              avatar: Image.asset("assets/avatars/jack253-png.png", width: 50.0, height: 50.0), 
-              self: false,
-              username: "Coder2",
-              text: "测试！" * (Random().nextInt(5) + 1),
-              msgResv: false, 
-              onLoadComplete: () => scrollToBottom()
-            ));
-    
-    setState(() { 
-      list = List.from(list);
+    ListTile tt = ListTile(
+        title: ChatMessageLine(
+            avatar: Image.asset("assets/avatars/jack253-png.png",
+                width: 50.0, height: 50.0),
+            self: false,
+            username: "Coder2",
+            text: "测试！" * (Random().nextInt(5) + 1),
+            msgResv: false,
+            onLoadComplete: () => scrollToBottom()));
+
+    setState(() {
       list.add(tt);
       key.currentState!.insertItem(list.length - 1);
       scrollToBottom();
@@ -46,9 +73,9 @@ class ChatMainPageState extends State<ChatMainPage> {
   double _po = 1;
 
   @override
-  void initState() { 
+  void initState() {
     super.initState();
-    var c;
+    dynamic c;
     c = (t) {
       SchedulerBinding.instance.addPostFrameCallback((Duration d) {
         setState(() {
@@ -58,11 +85,19 @@ class ChatMainPageState extends State<ChatMainPage> {
           var offset = _controller.offset;
 
           _height = extentInside - 30;
-          _po = (extentInside + maxScrollExtent) / extentInside / _height * extentInside;
-          _schHeight = _height * (extentInside / (extentInside + maxScrollExtent));
+          _po = (extentInside + maxScrollExtent) /
+              extentInside /
+              _height *
+              extentInside;
+          _schHeight =
+              _height * (extentInside / (extentInside + maxScrollExtent));
           _offset = (_height - _schHeight) * (offset / maxScrollExtent);
-          if (_offset.isNaN) { _offset = 0; }
-          if (dragging) { _controller.jumpTo(targetOff); }
+          if (_offset.isNaN) {
+            _offset = 0;
+          }
+          if (dragging) {
+            _controller.jumpTo(targetOff);
+          }
         });
       });
       WidgetsBinding.instance.addPostFrameCallback(c);
@@ -70,13 +105,12 @@ class ChatMainPageState extends State<ChatMainPage> {
     WidgetsBinding.instance.addPostFrameCallback(c);
 
     _controller.addListener(() {
-      var scrollDirection = _controller.position.userScrollDirection;
-      if (scrollDirection != ScrollDirection.idle)
-      {
-        double scrollEnd = _controller.offset + (scrollDirection == ScrollDirection.reverse
-                       ? -50
-                       : 50);
-        if (_controller.offset == _controller.position.minScrollExtent || _controller.offset == _controller.position.maxScrollExtent) return;
+      final scrollDirection = _controller.position.userScrollDirection;
+      if (scrollDirection != ScrollDirection.idle) {
+        double scrollEnd = _controller.offset +
+            (scrollDirection == ScrollDirection.reverse ? -50 : 50);
+        if (_controller.offset == _controller.position.minScrollExtent ||
+            _controller.offset == _controller.position.maxScrollExtent) return;
         dragging = false;
         _controller.jumpTo(scrollEnd);
       }
@@ -86,7 +120,9 @@ class ChatMainPageState extends State<ChatMainPage> {
   void scrollToBottom() {
     WidgetsBinding.instance.addPostFrameCallback((t) {
       if (_controller.positions.isEmpty) return;
-      _controller.animateTo(_controller.position.maxScrollExtent, duration: const Duration(milliseconds: 750), curve: Curves.easeOutExpo);
+      _controller.animateTo(_controller.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 750),
+          curve: Curves.easeOutExpo);
     });
   }
 
@@ -98,75 +134,125 @@ class ChatMainPageState extends State<ChatMainPage> {
 
   @override
   Widget build(BuildContext context) {
-    view = AnimatedList(key: key, initialItemCount: list.length, 
+    view = AnimatedList(
+      key: key,
+      initialItemCount: list.length,
       itemBuilder: (context, index, animation) {
-        ((list[index] as ListTile).title as ChatMessageLine).animation = animation;
+        ((list[index] as ListTile).title as ChatMessageLine).animation =
+            animation;
         return list[index];
-      }, 
-      controller: _controller, physics: const BouncingScrollPhysics(),
+      },
+      controller: _controller,
+      physics: const BouncingScrollPhysics(),
     );
 
-    var innerBar = Listener(
-              child: RoundedRect(width: 4, height: _schHeight, radius: 0, color: const Color.fromARGB(255, 95, 95, 95)), 
-              onPointerMove: (e) { targetOff = (e.localPosition.dy - dragOff!.dy) * _po + currOff; }, 
-              onPointerDown: (e) { dragOff = e.localPosition; currOff = _controller.offset; targetOff = currOff; dragging = e.buttons == 1; }, 
-              onPointerUp: (e) { dragging = false; }
-            );
-    var barBg = RoundedRect(key: barKey, width: 4, height: _height, radius: 0, color: const Color.fromARGB(255, 185, 185, 185));
+    final innerBar = Listener(
+        child: RoundedRect(
+            width: 4,
+            height: _schHeight,
+            radius: 0,
+            color: const Color.fromARGB(255, 95, 95, 95)),
+        onPointerMove: (e) {
+          targetOff = (e.localPosition.dy - dragOff!.dy) * _po + currOff;
+        },
+        onPointerDown: (e) {
+          dragOff = e.localPosition;
+          currOff = _controller.offset;
+          targetOff = currOff;
+          dragging = e.buttons == 1;
+        },
+        onPointerUp: (e) {
+          dragging = false;
+        });
+    final barBg = RoundedRect(
+        key: barKey,
+        width: 4,
+        height: _height,
+        radius: 0,
+        color: const Color.fromARGB(255, 185, 185, 185));
 
     Scaffold sc = Scaffold(
-      body: Stack(
-        alignment: Alignment.topRight,
-        children: [
-          Column(children: [
-            Expanded(child: ScrollConfiguration(behavior: const ScrollBehavior().copyWith(scrollbars: false), child: Listener(
-              child: view!, 
-              onPointerMove: (e) { targetOff = (dragOff!.dy - e.localPosition.dy) + currOff; }, 
-              onPointerDown: (e) { dragOff = e.localPosition; currOff = _controller.offset; targetOff = currOff; dragging = e.buttons == 1; }, 
-              onPointerUp: (e) { dragging = false; }
-              )
-            )), 
-            Padding(padding: EdgeInsets.only(top: tt)),
-          ]), 
-          Padding(padding: const EdgeInsets.only(
-            left: 10, right: 10, top: 10, bottom: 20
-          ), child: Listener(
+        body: Stack(
+          alignment: Alignment.topRight,
+          children: [
+            Column(children: [
+              Expanded(
+                  child: ScrollConfiguration(
+                      behavior:
+                          const ScrollBehavior().copyWith(scrollbars: false),
+                      child: Listener(
+                          child: view!,
+                          onPointerMove: (e) {
+                            targetOff =
+                                (dragOff!.dy - e.localPosition.dy) + currOff;
+                          },
+                          onPointerDown: (e) {
+                            dragOff = e.localPosition;
+                            currOff = _controller.offset;
+                            targetOff = currOff;
+                            dragging = e.buttons == 1;
+                          },
+                          onPointerUp: (e) {
+                            dragging = false;
+                          }))),
+              Padding(padding: EdgeInsets.only(top: tt)),
+            ]),
+            Padding(
+                padding: const EdgeInsets.only(
+                    left: 10, right: 10, top: 10, bottom: 20),
+                child: Listener(
                   child: Column(children: [
                     Stack(
                       alignment: Alignment.topRight,
                       children: [
-                        barBg, 
+                        barBg,
                         Positioned(top: _offset, child: innerBar)
                       ],
                     )
-                  ]), 
-                  onPointerMove: (e) { targetOff = (e.localPosition.dy - dragOff!.dy) * _po + currOff; }, 
-                  onPointerUp: (e) { dragging = false; }, 
+                  ]),
+                  onPointerMove: (e) {
+                    targetOff =
+                        (e.localPosition.dy - dragOff!.dy) * _po + currOff;
+                  },
+                  onPointerUp: (e) {
+                    dragging = false;
+                  },
                   onPointerDown: (e) {
-                    _controller.jumpTo(e.localPosition.dy / _height * (_height - _schHeight) * _po);
-                    dragOff = e.localPosition; currOff = _controller.offset; targetOff = currOff; dragging = e.buttons == 1;
+                    _controller.jumpTo(e.localPosition.dy /
+                        _height *
+                        (_height - _schHeight) *
+                        _po);
+                    dragOff = e.localPosition;
+                    currOff = _controller.offset;
+                    targetOff = currOff;
+                    dragging = e.buttons == 1;
                     dragging = true;
                   },
                 ))
-        ],
-      ), 
-      appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 235, 235, 235), // Theme.of(context).colorScheme.inversePrimary,
-        shadowColor: const Color.fromARGB(255, 255, 255, 255),
-        elevation: 0,
-        title: ChatHeader(), 
-        scrolledUnderElevation: 3.0, 
-        surfaceTintColor: Colors.transparent, 
-        bottom: PreferredSize(preferredSize: const Size(1, 1), child: Container(width: 2147483647, height: 1, color: const Color.fromARGB(125, 155, 155, 155))),
-      ),
-      floatingActionButton: FloatingActionButton(
+          ],
+        ),
+        appBar: AppBar(
+          backgroundColor: const Color.fromARGB(255, 235, 235,
+              235), // Theme.of(context).colorScheme.inversePrimary,
+          shadowColor: const Color.fromARGB(255, 255, 255, 255),
+          elevation: 0,
+          title: ChatHeader(),
+          scrolledUnderElevation: 3.0,
+          surfaceTintColor: Colors.transparent,
+          bottom: PreferredSize(
+              preferredSize: const Size(1, 1),
+              child: Container(
+                  width: 2147483647,
+                  height: 1,
+                  color: const Color.fromARGB(125, 155, 155, 155))),
+        ),
+        floatingActionButton: FloatingActionButton(
           onPressed: addMsg,
           tooltip: '添加测试信息',
           child: const Icon(Icons.add),
-        )
-    );
-    return ClipRRect(borderRadius: const BorderRadius.only(
-      topRight: Radius.circular(30)
-    ), child: sc);
+        ));
+    return ClipRRect(
+        borderRadius: const BorderRadius.only(topRight: Radius.circular(30)),
+        child: sc);
   }
 }

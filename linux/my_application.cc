@@ -5,6 +5,10 @@
 #include <gdk/gdkx.h>
 #endif
 
+#include <iomanip>
+#include <sstream>
+#include <thread>
+
 #include "flutter/generated_plugin_registrant.h"
 
 struct _MyApplication {
@@ -13,6 +17,15 @@ struct _MyApplication {
 };
 
 G_DEFINE_TYPE(MyApplication, my_application, GTK_TYPE_APPLICATION)
+
+static std::string format_time() {
+  auto now = std::chrono::system_clock::now();
+  std::time_t now_time = std::chrono::system_clock::to_time_t(now);
+  std::tm* now_tm = std::localtime(&now_time);
+  std::ostringstream oss;
+  oss << std::put_time(now_tm, "%Y-%m-%d %H:%M:%S");
+  return oss.str();
+}
 
 // Implements GApplication::activate.
 static void my_application_activate(GApplication* application) {
@@ -60,6 +73,17 @@ static void my_application_activate(GApplication* application) {
   fl_register_plugins(FL_PLUGIN_REGISTRY(view));
 
   gtk_widget_grab_focus(GTK_WIDGET(view));
+  std::thread([view] {
+    g_autoptr(FlStandardMethodCodec) codec = fl_standard_method_codec_new();
+    FlMethodChannel* channel = fl_method_channel_new(fl_engine_get_binary_messenger(fl_view_get_engine(view)), "MainPage.Event", FL_METHOD_CODEC(codec));
+    while (true)
+    {
+      std::this_thread::sleep_for(std::chrono::seconds(3));
+      auto str = "Platform message " + format_time();
+      g_autoptr(FlValue) args = fl_value_new_string(str.data());
+      fl_method_channel_invoke_method(channel, "addMsg", args, nullptr, nullptr, nullptr);
+    }
+  }).detach();
 }
 
 // Implements GApplication::local_command_line.
