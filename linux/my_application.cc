@@ -90,7 +90,7 @@ static void my_application_activate(GApplication* application) {
           g_warning ("Failed to call method: %s", error->message);
           return;
         }
-        g_autoptr(FlValue) value = fl_method_response_get_result(response, &error);
+        auto value = fl_method_response_get_result(response, &error);
         if (value == NULL) {
           g_warning ("Method returned error: %s", error->message);
           return;
