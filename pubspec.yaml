@@ -62,6 +62,11 @@ flutter:
     - assets/avatars/hackermdch.png
     - assets/avatars/jack253-png.png
 
+  fonts:
+    - family: StarRailFont_bundle
+      fonts:
+        - asset: assets/fonts/StarRailFont.ttf
+
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg
