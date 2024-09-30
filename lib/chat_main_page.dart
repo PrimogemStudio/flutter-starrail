@@ -47,16 +47,38 @@ class ChatMainPageState extends State<ChatMainPage> {
       }
       return Random().nextInt(5);
     });
+    const BasicMessageChannel('Channel2', StandardMessageCodec())
+        .setMessageHandler((message) async {
+      ListTile tt = ListTile(
+          title: ChatMessageLine(
+              avatar: Image.asset("assets/avatars/jack253-png.png",
+                  width: 50.0, height: 50.0),
+              self: false,
+              username: "Coder2",
+              text: message.toString(),
+              msgResv: false,
+              onLoadComplete: () => scrollToBottom()));
+
+      setState(() {
+        list.add(tt);
+        key.currentState!.insertItem(list.length - 1);
+        scrollToBottom();
+      });
+    });
   }
 
-  void addMsg() {
+  void addMsg() async {
+    var a = await const MethodChannel('MainPage.Event')
+        .invokeMethod("testPrint", Random().nextInt(100));
+    var b = await const BasicMessageChannel('Channel2', StandardMessageCodec())
+        .send("Hello minecraft");
     ListTile tt = ListTile(
         title: ChatMessageLine(
             avatar: Image.asset("assets/avatars/jack253-png.png",
                 width: 50.0, height: 50.0),
             self: false,
             username: "Coder2",
-            text: "测试！" * (Random().nextInt(5) + 1),
+            text: '$a,$b',
             msgResv: false,
             onLoadComplete: () => scrollToBottom()));
 
@@ -177,7 +199,7 @@ class ChatMainPageState extends State<ChatMainPage> {
     Scaffold sc = Scaffold(
         body: Stack(
           alignment: Alignment.topRight,
-          children: [ 
+          children: [
             Column(children: [
               Expanded(
                   child: ScrollConfiguration(
@@ -223,9 +245,9 @@ class ChatMainPageState extends State<ChatMainPage> {
                   onPointerDown: (e) {
                     if (!draggingInner) {
                       _controller.jumpTo(e.localPosition.dy /
-                        _height *
-                        (_height - _schHeight) *
-                        _po);
+                          _height *
+                          (_height - _schHeight) *
+                          _po);
                     }
                     dragOff = e.localPosition;
                     currOff = _controller.offset;
@@ -233,35 +255,37 @@ class ChatMainPageState extends State<ChatMainPage> {
                     dragging = e.buttons == 1;
                     dragging = true;
                   },
-                )), 
-              Column(children: [
-                Container(
-                  width: 2147483647,
-                  height: 1,
-                  color: const Color.fromARGB(255, 190, 190, 190),
-                ),
+                )),
+            Column(children: [
               Container(
-                  width: 2147483647,
-                  height: 8,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.rectangle,
-                    gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [Color.fromARGB(255, 235, 235, 235), Color.fromARGB(0, 235, 235, 235)]),
-                  ),
+                width: 2147483647,
+                height: 1,
+                color: const Color.fromARGB(255, 190, 190, 190),
+              ),
+              Container(
+                width: 2147483647,
+                height: 8,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.rectangle,
+                  gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Color.fromARGB(255, 235, 235, 235),
+                        Color.fromARGB(0, 235, 235, 235)
+                      ]),
                 ),
-              ])
+              ),
+            ])
           ],
         ),
         appBar: AppBar(
-          backgroundColor: const Color.fromARGB(255, 235, 235, 235),
-          shadowColor: const Color.fromARGB(255, 255, 255, 255),
-          elevation: 0,
-          title: ChatHeader(),
-          scrolledUnderElevation: 0,
-          surfaceTintColor: Colors.transparent
-        ),
+            backgroundColor: const Color.fromARGB(255, 235, 235, 235),
+            shadowColor: const Color.fromARGB(255, 255, 255, 255),
+            elevation: 0,
+            title: ChatHeader(),
+            scrolledUnderElevation: 0,
+            surfaceTintColor: Colors.transparent),
         floatingActionButton: FloatingActionButton(
           onPressed: addMsg,
           tooltip: '添加测试信息',
