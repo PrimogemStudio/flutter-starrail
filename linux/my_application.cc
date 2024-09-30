@@ -7,6 +7,7 @@
 
 #include <iomanip>
 #include <sstream>
+#include <iostream>
 #include <thread>
 
 #include "flutter/generated_plugin_registrant.h"
@@ -75,13 +76,27 @@ static void my_application_activate(GApplication* application) {
   gtk_widget_grab_focus(GTK_WIDGET(view));
   std::thread([view] {
     g_autoptr(FlStandardMethodCodec) codec = fl_standard_method_codec_new();
-    FlMethodChannel* channel = fl_method_channel_new(fl_engine_get_binary_messenger(fl_view_get_engine(view)), "MainPage.Event", FL_METHOD_CODEC(codec));
+    auto channel = fl_method_channel_new(fl_engine_get_binary_messenger(fl_view_get_engine(view)), "MainPage.Event", FL_METHOD_CODEC(codec));
     while (true)
     {
       std::this_thread::sleep_for(std::chrono::seconds(3));
       auto str = "Platform message " + format_time();
       g_autoptr(FlValue) args = fl_value_new_string(str.data());
-      fl_method_channel_invoke_method(channel, "addMsg", args, nullptr, nullptr, nullptr);
+      fl_method_channel_invoke_method(channel, "addMsg", args, nullptr, [](GObject *object, GAsyncResult *result, gpointer user_data)
+      {
+        g_autoptr(GError) error = NULL;
+        g_autoptr(FlMethodResponse) response = fl_method_channel_invoke_method_finish(FL_METHOD_CHANNEL(object), result, &error);
+        if (response == NULL) {
+          g_warning ("Failed to call method: %s", error->message);
+          return;
+        }
+        g_autoptr(FlValue) value = fl_method_response_get_result(response, &error);
+        if (value == NULL) {
+          g_warning ("Method returned error: %s", error->message);
+          return;
+        }
+        std::cout << fl_value_get_int(value) << std::endl;
+      }, nullptr);
     }
   }).detach();
 }
