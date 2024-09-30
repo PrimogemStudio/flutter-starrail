@@ -177,7 +177,7 @@ class ChatMainPageState extends State<ChatMainPage> {
     Scaffold sc = Scaffold(
         body: Stack(
           alignment: Alignment.topRight,
-          children: [
+          children: [ 
             Column(children: [
               Expanded(
                   child: ScrollConfiguration(
@@ -233,23 +233,34 @@ class ChatMainPageState extends State<ChatMainPage> {
                     dragging = e.buttons == 1;
                     dragging = true;
                   },
-                ))
+                )), 
+              Column(children: [
+                Container(
+                  width: 2147483647,
+                  height: 1,
+                  color: Color.fromARGB(255, 190, 190, 190),
+                ),
+              Container(
+                  width: 2147483647,
+                  height: 8,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.rectangle,
+                    gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [Color.fromARGB(255, 235, 235, 235), Color.fromARGB(0, 235, 235, 235)]),
+                  ),
+                ),
+              ])
           ],
         ),
         appBar: AppBar(
-          backgroundColor: const Color.fromARGB(255, 235, 235,
-              235), // Theme.of(context).colorScheme.inversePrimary,
+          backgroundColor: const Color.fromARGB(255, 235, 235, 235),
           shadowColor: const Color.fromARGB(255, 255, 255, 255),
           elevation: 0,
           title: ChatHeader(),
-          scrolledUnderElevation: 3.0,
-          surfaceTintColor: Colors.transparent,
-          bottom: PreferredSize(
-              preferredSize: const Size(1, 1),
-              child: Container(
-                  width: 2147483647,
-                  height: 1,
-                  color: const Color.fromARGB(125, 155, 155, 155))),
+          scrolledUnderElevation: 0,
+          surfaceTintColor: Colors.transparent
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: addMsg,
