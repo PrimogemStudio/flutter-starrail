@@ -238,7 +238,7 @@ class ChatMainPageState extends State<ChatMainPage> {
                 Container(
                   width: 2147483647,
                   height: 1,
-                  color: Color.fromARGB(255, 190, 190, 190),
+                  color: const Color.fromARGB(255, 190, 190, 190),
                 ),
               Container(
                   width: 2147483647,
