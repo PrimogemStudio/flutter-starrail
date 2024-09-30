@@ -129,6 +129,7 @@ class ChatMainPageState extends State<ChatMainPage> {
   Offset? dragOff;
   double currOff = 0;
   bool dragging = false;
+  bool draggingInner = false;
   double targetOff = 0;
   double tt = 0;
 
@@ -160,9 +161,11 @@ class ChatMainPageState extends State<ChatMainPage> {
           currOff = _controller.offset;
           targetOff = currOff;
           dragging = e.buttons == 1;
+          draggingInner = true;
         },
         onPointerUp: (e) {
           dragging = false;
+          draggingInner = false;
         });
     final barBg = RoundedRect(
         key: barKey,
@@ -218,10 +221,12 @@ class ChatMainPageState extends State<ChatMainPage> {
                     dragging = false;
                   },
                   onPointerDown: (e) {
-                    _controller.jumpTo(e.localPosition.dy /
+                    if (!draggingInner) {
+                      _controller.jumpTo(e.localPosition.dy /
                         _height *
                         (_height - _schHeight) *
                         _po);
+                    }
                     dragOff = e.localPosition;
                     currOff = _controller.offset;
                     targetOff = currOff;
