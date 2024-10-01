@@ -94,9 +94,9 @@ class ChatMainPageState extends State<ChatMainPage> with TickerProviderStateMixi
               });
 
               widget.panelAnimation!.forward();
-              /*Future.delayed(Duration(milliseconds: 1500), () {
+              Future.delayed(Duration(milliseconds: 1500), () {
                 widget.panelAnimation!.animateBack(0);
-              });*/
+              });
             }));
 
     pushMsg(tt);
@@ -174,7 +174,7 @@ class ChatMainPageState extends State<ChatMainPage> with TickerProviderStateMixi
   bool dragging = false;
   bool draggingInner = false;
   double targetOff = 0;
-  double panelHeight = 100;
+  double panelHeight = 0;
 
   @override
   Widget build(BuildContext context) {
