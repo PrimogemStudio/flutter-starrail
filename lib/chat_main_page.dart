@@ -12,6 +12,7 @@ class ChatMainPage extends StatefulWidget {
 
   AnimationController? panelAnimation;
   Animation? panelTween;
+  Animation<double>? panelRt;
 
   @override
   State<ChatMainPage> createState() => ChatMainPageState();
@@ -89,14 +90,16 @@ class ChatMainPageState extends State<ChatMainPage> with TickerProviderStateMixi
                 if (widget.panelAnimation!.isAnimating) return;
                 widget.panelAnimation!.reset();
 
-                widget.panelTween ??= Tween(begin: 0.0, end: 200.0).animate(CurveTween(curve: Curves.easeOutExpo).animate(widget.panelAnimation!));
+                widget.panelRt ??= CurveTween(curve: Curves.easeOutExpo).animate(widget.panelAnimation!);
+                widget.panelTween ??= Tween(begin: 0.0, end: 200.0).animate(widget.panelRt!);
                 widget.panelTween!.addListener(() {
                   panelHeight = widget.panelTween!.value;
+                  panelOpacity = widget.panelRt!.value;
                   scrollToBottom();
                 });
 
                 widget.panelAnimation!.forward();
-                Future.delayed(Duration(milliseconds: 1500), () => widget.panelAnimation!.animateBack(0));
+                Future.delayed(Duration(milliseconds: 15000), () => widget.panelAnimation!.animateBack(0));
               });
             }));
 
@@ -176,6 +179,7 @@ class ChatMainPageState extends State<ChatMainPage> with TickerProviderStateMixi
   bool draggingInner = false;
   double targetOff = 0;
   double panelHeight = 0;
+  double panelOpacity = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -242,7 +246,16 @@ class ChatMainPageState extends State<ChatMainPage> with TickerProviderStateMixi
                           onPointerUp: (e) {
                             dragging = false;
                           }))),
-              Opacity(opacity: panelHeight / 200, child: Container(height: panelHeight, color: Color.fromARGB(255, 185, 185, 185), child: TextField())),
+              Opacity(opacity: panelOpacity, child: Container(height: panelHeight, color: Color.fromARGB(
+                  255, 223, 223, 223), child: Column(children: [
+                    Container(
+                      width: 2147483647,
+                      height: 2,
+                      color: const Color.fromARGB(255, 200, 200, 200),
+                    ),
+                    TextField()
+                  ])
+              )),
             ]),
             Padding(
                 padding: const EdgeInsets.only(
