@@ -84,18 +84,18 @@ class ChatMainPageState extends State<ChatMainPage> with TickerProviderStateMixi
             msgResv: false,
             onLoadComplete: () {
               scrollToBottom();
-              widget.panelAnimation ??= AnimationController(vsync: this, duration: const Duration(milliseconds: 350));
-              widget.panelAnimation!.reset();
+              Future.delayed(Duration(milliseconds: 2000), () {
+                widget.panelAnimation ??= AnimationController(vsync: this, duration: const Duration(milliseconds: 350));
+                widget.panelAnimation!.reset();
 
-              widget.panelTween ??= Tween(begin: 0.0, end: 200.0).animate(CurveTween(curve: Curves.easeOutExpo).animate(widget.panelAnimation!));
-              widget.panelTween!.addListener(() {
-                panelHeight = widget.panelTween!.value;
-                scrollToBottom();
-              });
+                widget.panelTween ??= Tween(begin: 0.0, end: 200.0).animate(CurveTween(curve: Curves.easeOutExpo).animate(widget.panelAnimation!));
+                widget.panelTween!.addListener(() {
+                  panelHeight = widget.panelTween!.value;
+                  scrollToBottom();
+                });
 
-              widget.panelAnimation!.forward();
-              Future.delayed(Duration(milliseconds: 1500), () {
-                widget.panelAnimation!.animateBack(0);
+                widget.panelAnimation!.forward();
+                Future.delayed(Duration(milliseconds: 1500), () => widget.panelAnimation!.animateBack(0));
               });
             }));
 
@@ -195,7 +195,7 @@ class ChatMainPageState extends State<ChatMainPage> with TickerProviderStateMixi
             width: 4,
             height: _schHeight,
             radius: 0,
-            color: const Color.fromARGB(255, 95, 95, 95)),
+            color: const Color.fromARGB(255, 135, 135, 135)),
         onPointerMove: (e) {
           targetOff = (e.localPosition.dy - dragOff!.dy) * _po + currOff;
         },
@@ -215,7 +215,7 @@ class ChatMainPageState extends State<ChatMainPage> with TickerProviderStateMixi
         width: 4,
         height: _height,
         radius: 0,
-        color: const Color.fromARGB(255, 185, 185, 185));
+        color: const Color.fromARGB(255, 215, 215, 215));
 
     Scaffold sc = Scaffold(
         body: Stack(
