@@ -86,6 +86,7 @@ class ChatMainPageState extends State<ChatMainPage> with TickerProviderStateMixi
               scrollToBottom();
               Future.delayed(Duration(milliseconds: 1000), () {
                 widget.panelAnimation ??= AnimationController(vsync: this, duration: const Duration(milliseconds: 350));
+                if (widget.panelAnimation!.isAnimating) return;
                 widget.panelAnimation!.reset();
 
                 widget.panelTween ??= Tween(begin: 0.0, end: 200.0).animate(CurveTween(curve: Curves.easeOutExpo).animate(widget.panelAnimation!));
@@ -241,7 +242,7 @@ class ChatMainPageState extends State<ChatMainPage> with TickerProviderStateMixi
                           onPointerUp: (e) {
                             dragging = false;
                           }))),
-              SizedBox(height: panelHeight, child: TextField()),
+              Opacity(opacity: panelHeight / 200, child: Container(height: panelHeight, color: Color.fromARGB(255, 185, 185, 185), child: TextField())),
             ]),
             Padding(
                 padding: const EdgeInsets.only(
