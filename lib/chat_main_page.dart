@@ -11,6 +11,7 @@ class ChatMainPage extends StatefulWidget {
   ChatMainPage({super.key});
 
   AnimationController? panelAnimation;
+  Animation? panelTween;
 
   @override
   State<ChatMainPage> createState() => ChatMainPageState();
@@ -72,15 +73,6 @@ class ChatMainPageState extends State<ChatMainPage> with TickerProviderStateMixi
         .invokeMethod("testPrint", Random().nextInt(100));
     var b = await const BasicMessageChannel('Channel2', StandardMessageCodec())
         .send("Hello minecraft");*/
-    widget.panelAnimation ??= AnimationController(vsync: this, duration: const Duration(milliseconds: 350));
-    widget.panelAnimation!.addListener(() {
-      setState(() {
-        panelHeight = widget.panelAnimation!.value * 100;
-        scrollToBottom();
-      });
-    });
-    widget.panelAnimation!.reset();
-    widget.panelAnimation!.forward();
     ListTile tt = ListTile(
         title: ChatMessageLine(
             avatar: Image.asset("assets/avatars/jack253-png.png",
@@ -90,10 +82,29 @@ class ChatMainPageState extends State<ChatMainPage> with TickerProviderStateMixi
             // text: '$a,$b',
             text: "Test!",
             msgResv: false,
-            onLoadComplete: () => scrollToBottom()));
+            onLoadComplete: () {
+              scrollToBottom();
+              widget.panelAnimation ??= AnimationController(vsync: this, duration: const Duration(milliseconds: 350));
+              widget.panelAnimation!.reset();
 
+              widget.panelTween ??= Tween(begin: 0.0, end: 200.0).animate(CurveTween(curve: Curves.easeOutExpo).animate(widget.panelAnimation!));
+              widget.panelTween!.addListener(() {
+                panelHeight = widget.panelTween!.value;
+                scrollToBottom();
+              });
+
+              widget.panelAnimation!.forward();
+              /*Future.delayed(Duration(milliseconds: 1500), () {
+                widget.panelAnimation!.animateBack(0);
+              });*/
+            }));
+
+    pushMsg(tt);
+  }
+
+  void pushMsg(ListTile l) {
     setState(() {
-      list.add(tt);
+      list.add(l);
       key.currentState!.insertItem(list.length - 1);
       scrollToBottom();
     });
@@ -230,7 +241,7 @@ class ChatMainPageState extends State<ChatMainPage> with TickerProviderStateMixi
                           onPointerUp: (e) {
                             dragging = false;
                           }))),
-              Padding(padding: EdgeInsets.only(top: panelHeight)),
+              SizedBox(height: panelHeight, child: TextField()),
             ]),
             Padding(
                 padding: const EdgeInsets.only(
