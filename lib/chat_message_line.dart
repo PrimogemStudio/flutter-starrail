@@ -34,7 +34,7 @@ class ChatMessageLineState extends State<ChatMessageLine> with TickerProviderSta
   double o3 = 0;
 
   static double toO(double d) {
-    return (sin(d * 3.1415926 * 2) + 1) / 2 * 0.8 + 0.2;
+    return (sin(d * 3.1415926 * 2) + 1) / 2;
   }
 
   @override
@@ -48,17 +48,17 @@ class ChatMessageLineState extends State<ChatMessageLine> with TickerProviderSta
   void initState() {
     super.initState();
     widget.mainAnimation = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 350));
+        vsync: this, duration: const Duration(milliseconds: 600));
     widget.msgAnimation = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 100));
     widget.mainAnimation!.addListener(() {
       setState(() {
-        o = toO(1 - widget.mainAnimation!.value);
-        o2 = toO(1 - widget.mainAnimation!.value + 0.25);
-        o3 = toO(1 - widget.mainAnimation!.value + 0.5);
+        o = toO(1 - widget.mainAnimation!.value - 0.1);
+        o2 = toO(1 - widget.mainAnimation!.value);
+        o3 = toO(1 - widget.mainAnimation!.value + 0.1);
       });
     });
-    widget.mainAnimation!.repeat(reverse: true, max: 0.7);
+    widget.mainAnimation!.repeat();
     Future.delayed(
         Duration(
             milliseconds: min(
@@ -77,7 +77,7 @@ class ChatMessageLineState extends State<ChatMessageLine> with TickerProviderSta
       child: widget.avatar,
     );
     final msgMain = Card(
-        margin: const EdgeInsets.only(top: 5, left: 5),
+        margin: const EdgeInsets.only(top: 10),
         shadowColor: Colors.transparent,
         color: Colors.transparent,
         child: Row(children: [

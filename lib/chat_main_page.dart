@@ -84,7 +84,7 @@ class ChatMainPageState extends State<ChatMainPage> with TickerProviderStateMixi
             msgResv: false,
             onLoadComplete: () {
               scrollToBottom();
-              Future.delayed(Duration(milliseconds: 2000), () {
+              Future.delayed(Duration(milliseconds: 1000), () {
                 widget.panelAnimation ??= AnimationController(vsync: this, duration: const Duration(milliseconds: 350));
                 widget.panelAnimation!.reset();
 
@@ -195,7 +195,7 @@ class ChatMainPageState extends State<ChatMainPage> with TickerProviderStateMixi
             width: 4,
             height: _schHeight,
             radius: 0,
-            color: const Color.fromARGB(255, 135, 135, 135)),
+            color: const Color.fromARGB(255, 105, 105, 105)),
         onPointerMove: (e) {
           targetOff = (e.localPosition.dy - dragOff!.dy) * _po + currOff;
         },
@@ -281,11 +281,11 @@ class ChatMainPageState extends State<ChatMainPage> with TickerProviderStateMixi
               Container(
                 width: 2147483647,
                 height: 1,
-                color: const Color.fromARGB(255, 190, 190, 190),
+                color: const Color.fromARGB(255, 205, 205, 205),
               ),
               Container(
                 width: 2147483647,
-                height: 8,
+                height: 10,
                 decoration: const BoxDecoration(
                   shape: BoxShape.rectangle,
                   gradient: LinearGradient(
