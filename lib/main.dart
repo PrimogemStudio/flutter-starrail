@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
               surface: Color.fromARGB(255, 235, 235, 235)),
           useMaterial3: true,
           fontFamily: "StarRailFont_bundle"),
-      home: const ChatMainPage(),
+      home: ChatMainPage(),
     );
   }
 }

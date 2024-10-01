@@ -28,8 +28,7 @@ class ChatMessageLine extends StatefulWidget {
   State<ChatMessageLine> createState() => ChatMessageLineState();
 }
 
-class ChatMessageLineState extends State<ChatMessageLine>
-    with TickerProviderStateMixin {
+class ChatMessageLineState extends State<ChatMessageLine> with TickerProviderStateMixin {
   double o = 0;
   double o2 = 0;
   double o3 = 0;

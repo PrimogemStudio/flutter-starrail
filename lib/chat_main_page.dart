@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
@@ -10,13 +8,15 @@ import 'packs/rounded_rect.dart';
 import 'dart:math';
 
 class ChatMainPage extends StatefulWidget {
-  const ChatMainPage({super.key});
+  ChatMainPage({super.key});
+
+  AnimationController? panelAnimation;
 
   @override
   State<ChatMainPage> createState() => ChatMainPageState();
 }
 
-class ChatMainPageState extends State<ChatMainPage> {
+class ChatMainPageState extends State<ChatMainPage> with TickerProviderStateMixin {
   List<Widget> list = [];
   AnimatedList? view;
   final ScrollController _controller = ScrollController();
@@ -27,7 +27,7 @@ class ChatMainPageState extends State<ChatMainPage> {
     const MethodChannel('MainPage.Event').setMethodCallHandler((call) async {
       switch (call.method) {
         case "addMsg":
-          final msg = call.arguments as String;
+          /*final msg = call.arguments as String;
           ListTile tt = ListTile(
               title: ChatMessageLine(
                   avatar: Image.asset("assets/avatars/jack253-png.png",
@@ -42,14 +42,14 @@ class ChatMainPageState extends State<ChatMainPage> {
             list.add(tt);
             key.currentState!.insertItem(list.length - 1);
             scrollToBottom();
-          });
+          });*/
           break;
       }
       return Random().nextInt(5);
     });
     const BasicMessageChannel('Channel2', StandardMessageCodec())
         .setMessageHandler((message) async {
-      ListTile tt = ListTile(
+      /*ListTile tt = ListTile(
           title: ChatMessageLine(
               avatar: Image.asset("assets/avatars/jack253-png.png",
                   width: 50.0, height: 50.0),
@@ -63,22 +63,32 @@ class ChatMainPageState extends State<ChatMainPage> {
         list.add(tt);
         key.currentState!.insertItem(list.length - 1);
         scrollToBottom();
-      });
+      });*/
     });
   }
 
   void addMsg() async {
-    var a = await const MethodChannel('MainPage.Event')
+    /*var a = await const MethodChannel('MainPage.Event')
         .invokeMethod("testPrint", Random().nextInt(100));
     var b = await const BasicMessageChannel('Channel2', StandardMessageCodec())
-        .send("Hello minecraft");
+        .send("Hello minecraft");*/
+    widget.panelAnimation ??= AnimationController(vsync: this, duration: const Duration(milliseconds: 350));
+    widget.panelAnimation!.addListener(() {
+      setState(() {
+        panelHeight = widget.panelAnimation!.value * 100;
+        scrollToBottom();
+      });
+    });
+    widget.panelAnimation!.reset();
+    widget.panelAnimation!.forward();
     ListTile tt = ListTile(
         title: ChatMessageLine(
             avatar: Image.asset("assets/avatars/jack253-png.png",
                 width: 50.0, height: 50.0),
             self: false,
             username: "Coder2",
-            text: '$a,$b',
+            // text: '$a,$b',
+            text: "Test!",
             msgResv: false,
             onLoadComplete: () => scrollToBottom()));
 
@@ -153,7 +163,7 @@ class ChatMainPageState extends State<ChatMainPage> {
   bool dragging = false;
   bool draggingInner = false;
   double targetOff = 0;
-  double tt = 0;
+  double panelHeight = 100;
 
   @override
   Widget build(BuildContext context) {
@@ -220,7 +230,7 @@ class ChatMainPageState extends State<ChatMainPage> {
                           onPointerUp: (e) {
                             dragging = false;
                           }))),
-              Padding(padding: EdgeInsets.only(top: tt)),
+              Padding(padding: EdgeInsets.only(top: panelHeight)),
             ]),
             Padding(
                 padding: const EdgeInsets.only(
