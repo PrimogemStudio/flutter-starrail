@@ -99,7 +99,6 @@ class ChatMainPageState extends State<ChatMainPage> with TickerProviderStateMixi
                 });
 
                 widget.panelAnimation!.forward();
-                Future.delayed(Duration(milliseconds: 15000), () => widget.panelAnimation!.animateBack(0));
               });
             }));
 
@@ -250,10 +249,39 @@ class ChatMainPageState extends State<ChatMainPage> with TickerProviderStateMixi
                   255, 223, 223, 223), child: Column(children: [
                     Container(
                       width: 2147483647,
-                      height: 2,
-                      color: const Color.fromARGB(255, 200, 200, 200),
+                      height: 3,
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.rectangle,
+                        gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              Color.fromARGB(255, 200, 200, 200),
+                              Color.fromARGB(0, 200, 200, 200)
+                            ]),
+                      ),
                     ),
-                    TextField()
+                    TextField(),
+                    ElevatedButton(
+                        onPressed: () => widget.panelAnimation!.animateBack(0),
+                        style: ButtonStyle(
+                            overlayColor: WidgetStateProperty.resolveWith((Set<WidgetState> states) {
+                              return Colors.transparent;
+                            }),
+                            foregroundColor: WidgetStateProperty.all(Colors.black),
+                            shape: WidgetStateProperty.all(BeveledRectangleBorder(borderRadius: BorderRadius.circular(0))),
+                            elevation: WidgetStateProperty.resolveWith((Set<WidgetState> states) {
+                              if (states.contains(WidgetState.pressed)) {
+                                return 0;
+                              }
+                              else if (states.contains(WidgetState.hovered)) {
+                                return 2;
+                              }
+                              return 2;
+                            })
+                        ),
+                        child: const Text("Test!")
+                    )
                   ])
               )),
             ]),
