@@ -266,7 +266,7 @@ class ChatMainPageState extends State<ChatMainPage> with TickerProviderStateMixi
                     ElevatedButton(
                         onPressed: () => widget.panelAnimation!.animateBack(0),
                         style: ButtonStyle(
-                            animationDuration: Duration(milliseconds: 1000),
+                            animationDuration: Duration(milliseconds: 250),
                             overlayColor: WidgetStateProperty.resolveWith((Set<WidgetState> states) {
                               /*if (states.contains(WidgetState.pressed)) {
                                 return Color.fromARGB(255, 160, 160, 160);
@@ -277,6 +277,7 @@ class ChatMainPageState extends State<ChatMainPage> with TickerProviderStateMixi
                               return Color.fromARGB(255, 225, 225, 225);*/
                               return Colors.transparent;
                             }),
+                            surfaceTintColor: WidgetStateProperty.all(Colors.red),
                             foregroundColor: WidgetStateProperty.all(Colors.black),
                             enableFeedback: false,
                             shape: WidgetStateProperty.all(BeveledRectangleBorder(borderRadius: BorderRadius.circular(0))),
