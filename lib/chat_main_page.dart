@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_starrail/packs/starrail_button.dart';
+import 'package:flutter_starrail/packs/starrail_list.dart';
 import 'chat_header.dart';
 import 'chat_message_line.dart';
-import 'packs/rounded_rect.dart';
 import 'dart:math';
 
 class ChatMainPage extends StatefulWidget {
@@ -21,12 +19,7 @@ class ChatMainPage extends StatefulWidget {
 }
 
 class ChatMainPageState extends State<ChatMainPage> with TickerProviderStateMixin {
-  List<Widget> list = [];
-  AnimatedList? view;
-  final ScrollController _controller = ScrollController();
-  GlobalKey<AnimatedListState> key = GlobalKey<AnimatedListState>();
-  GlobalKey barKey = GlobalKey();
-
+  GlobalKey<StarRailListState> key = GlobalKey<StarRailListState>();
   ChatMainPageState() {
     const MethodChannel('MainPage.Event').setMethodCallHandler((call) async {
       switch (call.method) {
@@ -86,7 +79,9 @@ class ChatMainPageState extends State<ChatMainPage> with TickerProviderStateMixi
             text: "Test!",
             msgResv: false,
             onLoadComplete: () {
-              scrollToBottom();
+              setState(() {
+                key.currentState!.scrollToBottom();
+              });
               Future.delayed(Duration(milliseconds: 1500), () {
                 widget.panelAnimation ??= AnimationController(vsync: this, duration: const Duration(milliseconds: 200));
                 if (widget.panelAnimation!.isAnimating) return;
@@ -96,9 +91,9 @@ class ChatMainPageState extends State<ChatMainPage> with TickerProviderStateMixi
                 widget.panelTween ??= Tween(begin: 0.0, end: 200.0).animate(widget.panelRt!);
                 widget.panelTween!.addListener(() {
                   panelHeight = widget.panelTween!.value;
-                  _controller.animateTo(_controller.position.maxScrollExtent,
-                      duration: const Duration(milliseconds: 10),
-                      curve: Curves.easeOutExpo);
+                  setState(() {
+                    key.currentState!.scrollToBottomImm();
+                  });
                 });
 
                 widget.panelOpacity ??= Tween(begin: 0.0, end: 1.0).animate(CurveTween(curve: Curves.easeInCubic).animate(widget.panelAnimation!));
@@ -110,232 +105,42 @@ class ChatMainPageState extends State<ChatMainPage> with TickerProviderStateMixi
               });
             }));
 
-    pushMsg(tt);
-  }
-
-  void pushMsg(ListTile l) {
     setState(() {
-      list.add(l);
-      key.currentState!.insertItem(list.length - 1);
-      scrollToBottom();
+      key.currentState!.pushMsg(tt);
     });
   }
 
-  double _offset = 0;
-  double _height = 0;
-  double _schHeight = 0;
-  double _po = 1;
-
-  @override
-  void initState() {
-    super.initState();
-    dynamic c;
-    c = (t) {
-      SchedulerBinding.instance.addPostFrameCallback((Duration d) {
-        setState(() {
-          if (_controller.positions.isEmpty) return;
-          var extentInside = key.currentContext!.size!.height;
-          var maxScrollExtent = _controller.position.maxScrollExtent;
-          var offset = _controller.offset;
-
-          _height = extentInside - 30;
-          _po = (extentInside + maxScrollExtent) /
-              extentInside /
-              _height *
-              extentInside;
-          _schHeight =
-              _height * (extentInside / (extentInside + maxScrollExtent));
-          _offset = (_height - _schHeight) * (offset / maxScrollExtent);
-          if (_offset.isNaN) {
-            _offset = 0;
-          }
-          if (dragging) {
-            _controller.jumpTo(targetOff);
-          }
-        });
-      });
-      WidgetsBinding.instance.addPostFrameCallback(c);
-    };
-    WidgetsBinding.instance.addPostFrameCallback(c);
-
-    _controller.addListener(() {
-      final scrollDirection = _controller.position.userScrollDirection;
-      if (scrollDirection != ScrollDirection.idle) {
-        double scrollEnd = _controller.offset +
-            (scrollDirection == ScrollDirection.reverse ? -50 : 50);
-        if (_controller.offset == _controller.position.minScrollExtent ||
-            _controller.offset == _controller.position.maxScrollExtent) return;
-        dragging = false;
-        _controller.jumpTo(scrollEnd);
-      }
-    });
-  }
-
-  void scrollToBottom() {
-    WidgetsBinding.instance.addPostFrameCallback((t) {
-      if (_controller.positions.isEmpty) return;
-      _controller.animateTo(_controller.position.maxScrollExtent,
-          duration: const Duration(milliseconds: 750),
-          curve: Curves.easeOutExpo);
-    });
-  }
-
-  Offset? dragOff;
-  double currOff = 0;
-  bool dragging = false;
-  bool draggingInner = false;
-  double targetOff = 0;
   double panelHeight = 0;
   double panelOpacity = 0;
 
   @override
   Widget build(BuildContext context) {
-    view = AnimatedList(
-      key: key,
-      initialItemCount: list.length,
-      itemBuilder: (context, index, animation) {
-        ((list[index] as ListTile).title as ChatMessageLine).animation =
-            animation;
-        return list[index];
-      },
-      controller: _controller,
-      physics: const BouncingScrollPhysics(),
-    );
-
-    final innerBar = Listener(
-        child: RoundedRect(
-            width: 4,
-            height: _schHeight,
-            radius: 0,
-            color: const Color.fromARGB(255, 105, 105, 105)),
-        onPointerMove: (e) {
-          targetOff = (e.localPosition.dy - dragOff!.dy) * _po + currOff;
-        },
-        onPointerDown: (e) {
-          dragOff = e.localPosition;
-          currOff = _controller.offset;
-          targetOff = currOff;
-          dragging = e.buttons == 1;
-          draggingInner = true;
-        },
-        onPointerUp: (e) {
-          dragging = false;
-          draggingInner = false;
-        });
-    final barBg = RoundedRect(
-        key: barKey,
-        width: 4,
-        height: _height,
-        radius: 0,
-        color: const Color.fromARGB(255, 215, 215, 215));
-
     Scaffold sc = Scaffold(
-        body: Stack(
-          alignment: Alignment.topRight,
-          children: [
-            Column(children: [
-              Expanded(
-                  child: ScrollConfiguration(
-                      behavior:
-                          const ScrollBehavior().copyWith(scrollbars: false),
-                      child: Listener(
-                          child: view!,
-                          onPointerMove: (e) {
-                            targetOff =
-                                (dragOff!.dy - e.localPosition.dy) + currOff;
-                          },
-                          onPointerDown: (e) {
-                            dragOff = e.localPosition;
-                            currOff = _controller.offset;
-                            targetOff = currOff;
-                            dragging = e.buttons == 1;
-                          },
-                          onPointerUp: (e) {
-                            dragging = false;
-                          }))),
-              Opacity(opacity: panelOpacity, child: Container(height: panelHeight, color: Color.fromARGB(
-                  255, 223, 223, 223), child: Column(children: [
-                    Container(
-                      width: 2147483647,
-                      height: 3,
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.rectangle,
-                        gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [
-                              Color.fromARGB(255, 200, 200, 200),
-                              Color.fromARGB(0, 200, 200, 200)
-                            ]),
-                      ),
-                    ),
-                    TextField(),
-                    Padding(padding: EdgeInsets.all(5)),
-                    ElevatedButton(
-                        onPressed: () => widget.panelAnimation!.animateBack(0),
-                        style: srStyle,
-                        child: const Text("Test!")
-                    )
-                  ])
-              )),
-            ]),
-            Padding(
-                padding: const EdgeInsets.only(
-                    left: 10, right: 10, top: 10, bottom: 20),
-                child: Listener(
-                  child: Column(children: [
-                    Stack(
-                      alignment: Alignment.topRight,
-                      children: [
-                        barBg,
-                        Positioned(top: _offset, child: innerBar)
-                      ],
-                    )
+        body: StarRailList(key: key, innerPanel: Opacity(opacity: panelOpacity, child: Container(height: panelHeight, color: Color.fromARGB(
+            255, 223, 223, 223), child: Column(children: [
+          Container(
+            width: 2147483647,
+            height: 3,
+            decoration: const BoxDecoration(
+              shape: BoxShape.rectangle,
+              gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Color.fromARGB(255, 200, 200, 200),
+                    Color.fromARGB(0, 200, 200, 200)
                   ]),
-                  onPointerMove: (e) {
-                    targetOff =
-                        (e.localPosition.dy - dragOff!.dy) * _po + currOff;
-                  },
-                  onPointerUp: (e) {
-                    dragging = false;
-                  },
-                  onPointerDown: (e) {
-                    if (!draggingInner) {
-                      _controller.jumpTo(e.localPosition.dy /
-                          _height *
-                          (_height - _schHeight) *
-                          _po);
-                    }
-                    dragOff = e.localPosition;
-                    currOff = _controller.offset;
-                    targetOff = currOff;
-                    dragging = e.buttons == 1;
-                    dragging = true;
-                  },
-                )),
-            Column(children: [
-              Container(
-                width: 2147483647,
-                height: 1,
-                color: const Color.fromARGB(255, 205, 205, 205),
-              ),
-              Container(
-                width: 2147483647,
-                height: 10,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.rectangle,
-                  gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        Color.fromARGB(255, 235, 235, 235),
-                        Color.fromARGB(0, 235, 235, 235)
-                      ]),
-                ),
-              ),
-            ])
-          ],
-        ),
+            ),
+          ),
+          TextField(),
+          Padding(padding: EdgeInsets.all(5)),
+          ElevatedButton(
+              onPressed: () => widget.panelAnimation!.animateBack(0),
+              style: srStyle,
+              child: const Text("Test!")
+          )
+        ])
+        ))),
         appBar: AppBar(
             backgroundColor: const Color.fromARGB(255, 235, 235, 235),
             shadowColor: const Color.fromARGB(255, 255, 255, 255),
