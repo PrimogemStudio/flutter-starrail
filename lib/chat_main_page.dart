@@ -269,14 +269,13 @@ class ChatMainPageState extends State<ChatMainPage> with TickerProviderStateMixi
                             animationDuration: Duration(milliseconds: 250),
                             overlayColor: WidgetStateProperty.resolveWith((Set<WidgetState> states) {
                               if (states.contains(WidgetState.pressed)) {
-                                return Color.fromARGB(255, 160, 160, 160);
+                                return Color.fromARGB(255, 180, 180, 180);
                               }
                               else if (states.contains(WidgetState.hovered)) {
-                                return Color.fromARGB(255, 240, 240, 240);
+                                return Color.fromARGB(255, 235, 235, 235);
                               }
                               return Color.fromARGB(255, 225, 225, 225);
                             }),
-                            surfaceTintColor: WidgetStateProperty.all(Colors.white),
                             foregroundColor: WidgetStateProperty.all(Colors.black),
                             shape: WidgetStateProperty.all(BeveledRectangleBorder(borderRadius: BorderRadius.circular(0))),
                             backgroundColor: WidgetStateProperty.resolveWith((Set<WidgetState> states) {
