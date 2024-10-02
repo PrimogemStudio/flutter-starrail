@@ -87,12 +87,12 @@ class ChatMainPageState extends State<ChatMainPage> with TickerProviderStateMixi
             msgResv: false,
             onLoadComplete: () {
               scrollToBottom();
-              Future.delayed(Duration(milliseconds: 500), () {
+              Future.delayed(Duration(milliseconds: 1500), () {
                 widget.panelAnimation ??= AnimationController(vsync: this, duration: const Duration(milliseconds: 200));
                 if (widget.panelAnimation!.isAnimating) return;
                 widget.panelAnimation!.reset();
 
-                widget.panelRt ??= CurveTween(curve: Curves.easeInOutQuad).animate(widget.panelAnimation!);
+                widget.panelRt ??= CurveTween(curve: Curves.easeInOutCirc).animate(widget.panelAnimation!);
                 widget.panelTween ??= Tween(begin: 0.0, end: 200.0).animate(widget.panelRt!);
                 widget.panelTween!.addListener(() {
                   panelHeight = widget.panelTween!.value;
