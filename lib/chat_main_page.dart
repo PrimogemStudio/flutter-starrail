@@ -268,20 +268,6 @@ class ChatMainPageState extends State<ChatMainPage> with TickerProviderStateMixi
                         style: ButtonStyle(
                             animationDuration: Duration(milliseconds: 250),
                             overlayColor: WidgetStateProperty.resolveWith((Set<WidgetState> states) {
-                              /*if (states.contains(WidgetState.pressed)) {
-                                return Color.fromARGB(255, 160, 160, 160);
-                              }
-                              else if (states.contains(WidgetState.hovered)) {
-                                return Color.fromARGB(255, 240, 240, 240);
-                              }
-                              return Color.fromARGB(255, 225, 225, 225);*/
-                              return Colors.transparent;
-                            }),
-                            surfaceTintColor: WidgetStateProperty.all(Colors.red),
-                            foregroundColor: WidgetStateProperty.all(Colors.black),
-                            enableFeedback: false,
-                            shape: WidgetStateProperty.all(BeveledRectangleBorder(borderRadius: BorderRadius.circular(0))),
-                            backgroundColor: WidgetStateProperty.resolveWith((Set<WidgetState> states) {
                               if (states.contains(WidgetState.pressed)) {
                                 return Color.fromARGB(255, 160, 160, 160);
                               }
@@ -290,14 +276,17 @@ class ChatMainPageState extends State<ChatMainPage> with TickerProviderStateMixi
                               }
                               return Color.fromARGB(255, 225, 225, 225);
                             }),
+                            surfaceTintColor: WidgetStateProperty.all(Colors.white),
+                            foregroundColor: WidgetStateProperty.all(Colors.black),
+                            shape: WidgetStateProperty.all(BeveledRectangleBorder(borderRadius: BorderRadius.circular(0))),
+                            backgroundColor: WidgetStateProperty.resolveWith((Set<WidgetState> states) {
+                              return Color.fromARGB(255, 225, 225, 225);
+                            }),
                             elevation: WidgetStateProperty.resolveWith((Set<WidgetState> states) {
                               if (states.contains(WidgetState.pressed)) {
                                 return 0;
                               }
-                              else if (states.contains(WidgetState.hovered)) {
-                                return 2;
-                              }
-                              return 2;
+                              return 4;
                             })
                         ),
                         child: const Text("Test!")
