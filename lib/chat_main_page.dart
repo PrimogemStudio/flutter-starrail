@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_starrail/packs/starrail_button.dart';
 import 'chat_header.dart';
 import 'chat_message_line.dart';
 import 'packs/rounded_rect.dart';
@@ -13,6 +14,7 @@ class ChatMainPage extends StatefulWidget {
   AnimationController? panelAnimation;
   Animation? panelTween;
   Animation<double>? panelRt;
+  Animation<double>? panelOpacity;
 
   @override
   State<ChatMainPage> createState() => ChatMainPageState();
@@ -85,17 +87,23 @@ class ChatMainPageState extends State<ChatMainPage> with TickerProviderStateMixi
             msgResv: false,
             onLoadComplete: () {
               scrollToBottom();
-              Future.delayed(Duration(milliseconds: 1000), () {
-                widget.panelAnimation ??= AnimationController(vsync: this, duration: const Duration(milliseconds: 350));
+              Future.delayed(Duration(milliseconds: 500), () {
+                widget.panelAnimation ??= AnimationController(vsync: this, duration: const Duration(milliseconds: 200));
                 if (widget.panelAnimation!.isAnimating) return;
                 widget.panelAnimation!.reset();
 
-                widget.panelRt ??= CurveTween(curve: Curves.easeOutExpo).animate(widget.panelAnimation!);
+                widget.panelRt ??= CurveTween(curve: Curves.easeInOutQuad).animate(widget.panelAnimation!);
                 widget.panelTween ??= Tween(begin: 0.0, end: 200.0).animate(widget.panelRt!);
                 widget.panelTween!.addListener(() {
                   panelHeight = widget.panelTween!.value;
-                  panelOpacity = widget.panelRt!.value;
-                  scrollToBottom();
+                  _controller.animateTo(_controller.position.maxScrollExtent,
+                      duration: const Duration(milliseconds: 10),
+                      curve: Curves.easeOutExpo);
+                });
+
+                widget.panelOpacity ??= Tween(begin: 0.0, end: 1.0).animate(CurveTween(curve: Curves.easeInCubic).animate(widget.panelAnimation!));
+                widget.panelOpacity!.addListener(() {
+                  panelOpacity = widget.panelOpacity!.value;
                 });
 
                 widget.panelAnimation!.forward();
@@ -265,30 +273,7 @@ class ChatMainPageState extends State<ChatMainPage> with TickerProviderStateMixi
                     Padding(padding: EdgeInsets.all(5)),
                     ElevatedButton(
                         onPressed: () => widget.panelAnimation!.animateBack(0),
-                        style: ButtonStyle(
-                            animationDuration: Duration(milliseconds: 150),
-                            overlayColor: WidgetStateProperty.resolveWith((Set<WidgetState> states) {
-                              if (states.contains(WidgetState.pressed)) {
-                                return Color.fromARGB(255, 180, 180, 180);
-                              }
-                              else if (states.contains(WidgetState.hovered)) {
-                                return Color.fromARGB(255, 235, 235, 235);
-                              }
-                              return Color.fromARGB(255, 225, 225, 225);
-                            }),
-                            foregroundColor: WidgetStateProperty.all(Colors.black),
-                            shape: WidgetStateProperty.all(BeveledRectangleBorder(borderRadius: BorderRadius.circular(0))),
-                            backgroundColor: WidgetStateProperty.resolveWith((Set<WidgetState> states) {
-                              return Color.fromARGB(255, 225, 225, 225);
-                            }),
-                            elevation: WidgetStateProperty.resolveWith((Set<WidgetState> states) {
-                              if (states.contains(WidgetState.pressed)) {
-                                return 0;
-                              }
-                              return 4;
-                            }),
-                            splashFactory: NoSplash.splashFactory
-                        ),
+                        style: srStyle,
                         child: const Text("Test!")
                     )
                   ])
