@@ -22,5 +22,6 @@ var srStyle = ButtonStyle(
       }
       return 3;
     }),
-    splashFactory: NoSplash.splashFactory
+    splashFactory: NoSplash.splashFactory, 
+    textStyle: WidgetStateProperty.all(TextStyle(fontSize: 16))
 );
