@@ -8,8 +8,8 @@ import 'chat_header.dart';
 import 'chat_message_line.dart';
 import 'main.dart';
 
-const currentUser = "hackerm大神";
-const currentAvatar = "hackermdch";
+const currentUser = "Coder2";
+const currentAvatar = "jack253-png";
 
 class ChatMainPage extends StatefulWidget {
   const ChatMainPage({super.key});

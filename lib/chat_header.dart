@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-const replyer = "Coder2";
-const replyerDesc = "Advanced Framework 主开发者";
+const replyer = "hackerm大神";
+const replyerDesc = "一个一般路过的普通开发者~";
 
 class ChatHeader extends StatelessWidget {
   const ChatHeader({super.key});
