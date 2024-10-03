@@ -62,9 +62,9 @@ class ChatMessageLineState extends State<ChatMessageLine> with TickerProviderSta
     widget.mainAnimation!.repeat();
     Future.delayed(
         Duration(
-            milliseconds: max(
+            milliseconds: min(
                 (widget.text.length + widget.username.length) * 30 + 100,
-                15000)), () {
+                3000)), () {
       bool t = widget.msgResv;
       widget.msgResv = true;
       if (!t) widget.onLoadComplete();
