@@ -21,6 +21,8 @@ class ChatMainPage extends StatefulWidget {
 
 class ChatMainPageState extends State<ChatMainPage> with TickerProviderStateMixin {
   GlobalKey<StarRailListState> key = GlobalKey<StarRailListState>();
+  TextEditingController textCont = TextEditingController();
+
   ChatMainPageState() {
     const MethodChannel('MainPage.Event').setMethodCallHandler((call) async {
       switch (call.method) {
@@ -65,7 +67,7 @@ class ChatMainPageState extends State<ChatMainPage> with TickerProviderStateMixi
     });
   }
 
-  void addMsg() async {
+  void addMsg(String s) async {
     /*var a = await const MethodChannel('MainPage.Event')
         .invokeMethod("testPrint", Random().nextInt(100));
     var b = await const BasicMessageChannel('Channel2', StandardMessageCodec())
@@ -77,14 +79,14 @@ class ChatMainPageState extends State<ChatMainPage> with TickerProviderStateMixi
             self: false,
             username: "Coder2",
             // text: '$a,$b',
-            text: "Test!",
+            text: s,
             msgResv: false,
             onLoadComplete: () {
               setState(() {
                 key.currentState!.scrollToBottom();
               });
               Future.delayed(Duration(milliseconds: 1500), () {
-                widget.panelAnimation ??= AnimationController(vsync: this, duration: const Duration(milliseconds: 300));
+                widget.panelAnimation ??= AnimationController(vsync: this, duration: const Duration(milliseconds: 200));
                 if (widget.panelAnimation!.isAnimating) return;
                 widget.panelAnimation!.reset();
 
@@ -132,12 +134,12 @@ class ChatMainPageState extends State<ChatMainPage> with TickerProviderStateMixi
                   ]),
             ),
           ),
-          TextField(),
+          TextField(controller: textCont),
           Padding(padding: EdgeInsets.all(5)),
           Padding(padding: EdgeInsets.all(10), child: ElevatedButton(
               onPressed: () {
                 widget.panelAnimation!.animateBack(0);
-                Future.delayed(Duration(milliseconds: 550), () => addMsg());
+                Future.delayed(Duration(milliseconds: 450), () => addMsg(textCont.text));
               },
               style: srStyle,
               child: const Text("Test!")
@@ -152,7 +154,7 @@ class ChatMainPageState extends State<ChatMainPage> with TickerProviderStateMixi
             scrolledUnderElevation: 0,
             surfaceTintColor: Colors.transparent),
         floatingActionButton: FloatingActionButton(
-          onPressed: addMsg,
+          onPressed: () => addMsg("Test!"),
           tooltip: '添加测试信息',
           child: const Icon(Icons.add),
         ));
