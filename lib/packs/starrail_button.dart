@@ -28,5 +28,5 @@ var srStyle = ButtonStyle(
       return 2;
     }),
     splashFactory: NoSplash.splashFactory, 
-    textStyle: WidgetStateProperty.all(TextStyle(fontSize: 16))
+    textStyle: WidgetStateProperty.all(TextStyle(fontSize: 16, fontFamily: "StarRailFont_bundle"))
 );

@@ -27,7 +27,7 @@ class StarRailPanelState extends State<StarRailPanel> with TickerProviderStateMi
   double panelHeight = 0;
   double panelOpacity = 0;
 
-  void openPanel() {
+  void init() {
     widget.panelAnimation ??= AnimationController(vsync: this, duration: const Duration(milliseconds: 200));
     if (widget.panelAnimation!.isAnimating) return;
     widget.panelAnimation!.reset();
@@ -45,11 +45,15 @@ class StarRailPanelState extends State<StarRailPanel> with TickerProviderStateMi
     widget.panelOpacity!.addListener(() {
       panelOpacity = max(widget.panelOpacity!.value, 0);
     });
+  }
 
+  void openPanel() {
+    if (widget.panelAnimation == null) init();
     widget.panelAnimation!.forward();
   }
 
   void closePanel() {
+    if (widget.panelAnimation == null) init();
     widget.panelAnimation!.animateBack(0, curve: Curves.easeInExpo);
   }
 
