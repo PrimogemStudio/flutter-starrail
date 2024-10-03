@@ -42,7 +42,7 @@ class StarRailPanelState extends State<StarRailPanel> with TickerProviderStateMi
       });
     });
 
-    if (!u) { widget.panelAnimation!.forward(from: 1); }
+    widget.panelAnimation!.forward(from: u ? 0 : 1);
 
     widget.panelOpacity ??= Tween(begin: 0.0, end: 1.0).animate(CurveTween(curve: Curves.easeInBack).animate(widget.panelAnimation!));
     widget.panelOpacity!.addListener(() {
