@@ -50,11 +50,13 @@ class StarRailPanelState extends State<StarRailPanel> with TickerProviderStateMi
 
   void openPanel() {
     if (widget.panelAnimation == null) init();
+    widget.panelAnimation!.stop();
     widget.panelAnimation!.animateTo(1);
   }
 
   void closePanel() {
     if (widget.panelAnimation == null) init();
+    widget.panelAnimation!.stop();
     widget.panelAnimation!.animateBack(0, curve: Curves.easeInExpo);
   }
 
