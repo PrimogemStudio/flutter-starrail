@@ -28,7 +28,7 @@ class StarRailPanelState extends State<StarRailPanel> with TickerProviderStateMi
   double panelHeight = 0;
   double panelOpacity = 0;
 
-  void init(bool u) {
+  void init() {
     widget.panelAnimation ??= AnimationController(vsync: this, duration: const Duration(milliseconds: 200));
     if (widget.panelAnimation!.isAnimating) return;
     widget.panelAnimation!.reset();
@@ -42,8 +42,6 @@ class StarRailPanelState extends State<StarRailPanel> with TickerProviderStateMi
       });
     });
 
-    widget.panelAnimation!.forward(from: u ? 0 : 1);
-
     widget.panelOpacity ??= Tween(begin: 0.0, end: 1.0).animate(CurveTween(curve: Curves.easeInBack).animate(widget.panelAnimation!));
     widget.panelOpacity!.addListener(() {
       panelOpacity = max(widget.panelOpacity!.value, 0);
@@ -51,12 +49,12 @@ class StarRailPanelState extends State<StarRailPanel> with TickerProviderStateMi
   }
 
   void openPanel() {
-    if (widget.panelAnimation == null) init(true);
-    widget.panelAnimation!.forward();
+    if (widget.panelAnimation == null) init();
+    widget.panelAnimation!.animateTo(1);
   }
 
   void closePanel() {
-    if (widget.panelAnimation == null) init(false);
+    if (widget.panelAnimation == null) init();
     widget.panelAnimation!.animateBack(0, curve: Curves.easeInExpo);
   }
 
