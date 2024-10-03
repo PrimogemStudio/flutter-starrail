@@ -1,12 +1,12 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_starrail/network/socket.dart';
 import 'package:flutter_starrail/packs/starrail_colors.dart';
 import 'package:flutter_starrail/packs/starrail_list.dart';
 import 'package:flutter_starrail/packs/starrail_panel.dart';
 import 'chat_header.dart';
 import 'chat_message_line.dart';
-import 'main.dart';
 
 const currentUser = "Coder2";
 const currentAvatar = "jack253-png";
@@ -25,10 +25,7 @@ class ChatMainPageState extends State<ChatMainPage>
   bool panelOpened = false;
 
   ChatMainPageState() {
-    socket!.listen((data) {
-      var json = JsonDecoder().convert(utf8.decode(data));
-      addMsg(json["msg"], json["username"], json["avatar"], false);
-    });
+    socketRecv((json) => addMsg(json["msg"], json["username"], json["avatar"], false));
   }
 
   void addMsg(String msg, String username, String avatar, bool self) async {
@@ -51,9 +48,7 @@ class ChatMainPageState extends State<ChatMainPage>
 
   void sendMsg(String s) async {
     addMsg(s, currentUser, currentAvatar, true);
-    var json = {"msg": s, "username": currentUser, "avatar": currentAvatar};
-    socket!.write(JsonEncoder().convert(json));
-    await socket!.flush();
+    socketSend({"msg": s, "username": currentUser, "avatar": currentAvatar});
   }
 
   @override
