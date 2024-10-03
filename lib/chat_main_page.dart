@@ -1,11 +1,7 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_starrail/network/socket.dart';
-import 'package:flutter_starrail/packs/starrail_colors.dart';
 import 'package:flutter_starrail/packs/starrail_list.dart';
 import 'package:flutter_starrail/packs/starrail_panel.dart';
-import 'chat_header.dart';
 import 'chat_message_line.dart';
 
 const currentUser = "Coder2";
@@ -51,36 +47,23 @@ class ChatMainPageState extends State<ChatMainPage>
     socketSend({"msg": s, "username": currentUser, "avatar": currentAvatar});
   }
 
+  void openPanel() {
+    if (!panelOpened) {
+      panelKey.currentState!.openPanel();
+      panelOpened = true;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    Scaffold sc = Scaffold(
-        body: StarRailList(
-            key: key,
-            innerPanel: StarRailPanel(
-                key: panelKey,
-                func: () {
-                  sendMsg(panelKey.currentState!.getText());
-                  panelOpened = false;
-                },
-                onMoving: () => key.currentState!.scrollToBottomImm())),
-        appBar: AppBar(
-            backgroundColor: uiSurfaceColor,
-            shadowColor: Colors.transparent,
-            elevation: 0,
-            title: ChatHeader(),
-            scrolledUnderElevation: 0,
-            surfaceTintColor: Colors.transparent),
-        floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              if (!panelOpened) {
-                panelKey.currentState!.openPanel();
-                panelOpened = true;
-              }
+    return StarRailList(
+        key: key,
+        innerPanel: StarRailPanel(
+            key: panelKey,
+            func: () {
+              sendMsg(panelKey.currentState!.getText());
+              panelOpened = false;
             },
-            tooltip: '添加测试信息',
-            child: const Icon(Icons.add)));
-    return ClipRRect(
-        borderRadius: const BorderRadius.only(topRight: Radius.circular(30)),
-        child: sc);
+            onMoving: () => key.currentState!.scrollToBottomImm()));
   }
 }

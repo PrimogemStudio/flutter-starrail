@@ -4,7 +4,7 @@ import 'package:args/args.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_starrail/network/socket.dart';
 import 'package:flutter_starrail/packs/starrail_colors.dart';
-import 'chat_main_page.dart';
+import 'chat_indeterminate_page.dart';
 import 'package:flutter/scheduler.dart' show timeDilation;
 
 void main(List<String> arguments) async {
@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.light(surface: uiSurfaceColor),
           useMaterial3: true,
           fontFamily: "StarRailFont_bundle"),
-      home: ChatMainPage(),
+      home: ChatIndeterminatePage(),
     );
   }
 }
