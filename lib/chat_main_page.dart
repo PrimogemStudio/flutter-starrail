@@ -26,7 +26,7 @@ class ChatMainPageState extends State<ChatMainPage>
 
   ChatMainPageState() {
     socket!.listen((data) {
-      var json = JsonDecoder().convert(String.fromCharCodes(data));
+      var json = JsonDecoder().convert(utf8.decode(data));
       addMsg(json["msg"], json["username"], json["avatar"], false);
     });
   }
