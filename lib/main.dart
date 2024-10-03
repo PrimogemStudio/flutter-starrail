@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_starrail/packs/starrail_colors.dart';
 import 'chat_main_page.dart';
 import 'package:flutter/scheduler.dart' show timeDilation;
 
@@ -16,8 +17,9 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-          colorScheme: const ColorScheme.light(
-              surface: Color.fromARGB(255, 235, 235, 235)),
+          colorScheme: ColorScheme.light(
+              surface: uiSurfaceColor
+          ),
           useMaterial3: true,
           fontFamily: "StarRailFont_bundle"),
       home: ChatMainPage(),

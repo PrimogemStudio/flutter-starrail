@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_starrail/packs/starrail_colors.dart';
 import 'packs/rounded_rect.dart';
 import 'dart:math';
 
@@ -108,7 +109,7 @@ class ChatMessageLineState extends State<ChatMessageLine> with TickerProviderSta
 
     final msgMain2 = Card(
         elevation: 0,
-        color: const Color.fromARGB(255, 184, 184, 184),
+        color: uiMsgShadow,
         margin: widget.self
             ? const EdgeInsets.fromLTRB(0, 0, 10, 5)
             : const EdgeInsets.fromLTRB(10, 5, 0, 0),
@@ -124,7 +125,7 @@ class ChatMessageLineState extends State<ChatMessageLine> with TickerProviderSta
                 bottomRight: const Radius.circular(11.5))),
         child: Card(
             elevation: 0,
-            color: const Color.fromARGB(255, 253, 253, 253),
+            color: uiMsgMainOth,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.only(
                     topLeft: widget.self
@@ -175,9 +176,7 @@ class ChatMessageLineState extends State<ChatMessageLine> with TickerProviderSta
                         : const EdgeInsets.fromLTRB(10, 5, 0, 0),
                     child: FadeTransition(
                         opacity: widget.animation!,
-                        child: Text(widget.username,
-                            style: const TextStyle(
-                                color: Color.fromARGB(255, 100, 100, 100))))),
+                        child: Text(widget.username, style: TextStyle(color: uiMsgSrc)))),
                 Stack(
                     textDirection:
                         widget.self ? TextDirection.rtl : TextDirection.ltr,

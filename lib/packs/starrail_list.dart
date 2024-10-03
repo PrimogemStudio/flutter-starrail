@@ -4,6 +4,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_starrail/packs/rounded_rect.dart';
 
 import '../chat_message_line.dart';
+import 'starrail_colors.dart';
 
 class StarRailList extends StatefulWidget {
   const StarRailList({
@@ -53,7 +54,9 @@ class StarRailListState extends State<StarRailList> {
   }
 
   void scrollToBottomImm() {
-    _controller.jumpTo(_controller.position.maxScrollExtent);
+    _controller.animateTo(_controller.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 150),
+        curve: Curves.easeOutExpo);
   }
 
   @override
@@ -120,7 +123,7 @@ class StarRailListState extends State<StarRailList> {
             width: 4,
             height: _schHeight,
             radius: 0,
-            color: const Color.fromARGB(255, 105, 105, 105)),
+            color: uiViewBarMain),
         onPointerMove: (e) {
           targetOff = (e.localPosition.dy - dragOff!.dy) * _po + currOff;
         },
@@ -140,7 +143,8 @@ class StarRailListState extends State<StarRailList> {
         width: 4,
         height: _height,
         radius: 0,
-        color: const Color.fromARGB(255, 215, 215, 215));
+        color: uiViewBarBg
+    );
 
     final mainBar = Padding(
         padding: const EdgeInsets.only(
@@ -208,19 +212,19 @@ class StarRailListState extends State<StarRailList> {
           Container(
             width: 2147483647,
             height: 1,
-            color: const Color.fromARGB(255, 205, 205, 205),
+            color: uiViewSplit,
           ),
           Container(
             width: 2147483647,
             height: 10,
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               shape: BoxShape.rectangle,
               gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
-                    Color.fromARGB(255, 235, 235, 235),
-                    Color.fromARGB(0, 235, 235, 235)
+                    uiSurfaceColor,
+                    uiSurfaceColorTrans
                   ]),
             ),
           ),
