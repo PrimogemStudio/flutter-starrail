@@ -137,9 +137,7 @@ class ChatMainPageState extends State<ChatMainPage> with TickerProviderStateMixi
           Padding(padding: EdgeInsets.all(10), child: ElevatedButton(
               onPressed: () {
                 widget.panelAnimation!.animateBack(0);
-                Future.delayed(Duration(milliseconds: 550), () {
-                  addMsg();
-                });
+                Future.delayed(Duration(milliseconds: 550), () => addMsg());
               },
               style: srStyle,
               child: const Text("Test!")

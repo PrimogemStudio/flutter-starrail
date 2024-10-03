@@ -49,22 +49,22 @@ class ChatMessageLineState extends State<ChatMessageLine> with TickerProviderSta
   void initState() {
     super.initState();
     widget.mainAnimation = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 600));
+        vsync: this, duration: const Duration(milliseconds: 1000));
     widget.msgAnimation = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 100));
     widget.mainAnimation!.addListener(() {
       setState(() {
-        o = toO(1 - widget.mainAnimation!.value - 0.1);
-        o2 = toO(1 - widget.mainAnimation!.value);
-        o3 = toO(1 - widget.mainAnimation!.value + 0.1);
+        o = toO(-widget.mainAnimation!.value - 0.1);
+        o2 = toO(-widget.mainAnimation!.value);
+        o3 = toO(-widget.mainAnimation!.value + 0.1);
       });
     });
     widget.mainAnimation!.repeat();
     Future.delayed(
         Duration(
-            milliseconds: min(
+            milliseconds: max(
                 (widget.text.length + widget.username.length) * 30 + 100,
-                1500)), () {
+                15000)), () {
       bool t = widget.msgResv;
       widget.msgResv = true;
       if (!t) widget.onLoadComplete();
@@ -125,7 +125,7 @@ class ChatMessageLineState extends State<ChatMessageLine> with TickerProviderSta
                 bottomRight: const Radius.circular(11.5))),
         child: Card(
             elevation: 0,
-            color: uiMsgMainOth,
+            color: widget.self ? uiMsgMainSlf : uiMsgMainOth,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.only(
                     topLeft: widget.self

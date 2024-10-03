@@ -9,6 +9,7 @@ var uiPanelBorderTrans = Color.fromARGB(0, 200, 200, 200);
 var uiMsgShadow = Color.fromARGB(255, 184, 184, 184);
 var uiMsgSrc = Color.fromARGB(255, 100, 100, 100);
 var uiMsgMainOth = Color.fromARGB(255, 253, 253, 253);
+var uiMsgMainSlf = Color.fromARGB(255, 209, 189, 149);
 
 var uiViewSplit = Color.fromARGB(255, 205, 205, 205);
 var uiViewBarMain = Color.fromARGB(255, 105, 105, 105);
