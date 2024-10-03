@@ -23,7 +23,7 @@ var srStyle = ButtonStyle(
         return 0;
       }
       else if (states.contains(WidgetState.hovered)) {
-        return 4;
+        return 3;
       }
       return 2;
     }),
