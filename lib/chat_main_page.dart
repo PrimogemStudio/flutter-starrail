@@ -1,12 +1,15 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_starrail/packs/starrail_colors.dart';
 import 'package:flutter_starrail/packs/starrail_list.dart';
 import 'package:flutter_starrail/packs/starrail_panel.dart';
 import 'chat_header.dart';
 import 'chat_message_line.dart';
-import 'dart:io';
+import 'main.dart';
 
-external Socket? socket;
+const currentUser = "hackerm大神";
+const currentAvatar = "hackermdch";
 
 class ChatMainPage extends StatefulWidget {
   const ChatMainPage({super.key});
@@ -23,18 +26,19 @@ class ChatMainPageState extends State<ChatMainPage>
 
   ChatMainPageState() {
     socket!.listen((data) {
-      addMsg(String.fromCharCodes(data));
+      var json = JsonDecoder().convert(String.fromCharCodes(data));
+      addMsg(json["msg"], json["username"], json["avatar"], false);
     });
   }
 
-  void addMsg(String s) async {
+  void addMsg(String msg, String username, String avatar, bool self) async {
     ListTile tt = ListTile(
         title: ChatMessageLine(
-            avatar: Image.asset("assets/avatars/jack253-png.png",
+            avatar: Image.asset("assets/avatars/$avatar.png",
                 width: 50.0, height: 50.0),
-            self: true,
-            username: "Coder2",
-            text: s,
+            self: self,
+            username: username,
+            text: msg,
             msgResv: false,
             onLoadComplete: () {
               setState(() {
@@ -46,7 +50,9 @@ class ChatMainPageState extends State<ChatMainPage>
   }
 
   void sendMsg(String s) async {
-    socket!.write(s);
+    addMsg(s, currentUser, currentAvatar, true);
+    var json = {"msg": s, "username": currentUser, "avatar": currentAvatar};
+    socket!.write(JsonEncoder().convert(json));
     await socket!.flush();
   }
 

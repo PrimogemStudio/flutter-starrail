@@ -13,9 +13,9 @@ bool server = false;
 void main(List<String> arguments) async {
   timeDilation = 1.5;
   final parser = ArgParser()
-    ..addOption('server', abbr: 's', help: 'Open as server');
+    ..addFlag('server', abbr: 's', help: 'Open as server');
   final args = parser.parse(arguments);
-  server = args['server'] as bool;
+  server = args.flag("server");
   if (server) {
     serverSocket = await ServerSocket.bind(InternetAddress.anyIPv4, 32767);
     await for (var s in serverSocket!) {
