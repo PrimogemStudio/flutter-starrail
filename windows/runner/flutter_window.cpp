@@ -52,17 +52,6 @@ bool FlutterWindow::OnCreate() {
 	// registered. The following call ensures a frame is pending to ensure the
 	// window is shown. It is a no-op if the first frame hasn't completed yet.
 	flutter_controller_->ForceRedraw();
-	channel_ = std::make_unique<MethodChannel<>>(flutter_controller_->engine()->messenger(), "MainPage.Event", &StandardMethodCodec::GetInstance());
-	std::thread([channel = channel_.get()] {
-		while (true)
-		{
-			std::this_thread::sleep_for(std::chrono::seconds(3));
-			channel->InvokeMethod("addMsg", std::make_unique<EncodableValue>("Platform message " + format_time()), std::make_unique<MethodResultFunctions<>>([](const EncodableValue* result)
-			{
-				std::cout << std::get<int>(*result) << std::endl;
-			}, nullptr, nullptr));
-		}
-	}).detach();
 	return true;
 }
 
