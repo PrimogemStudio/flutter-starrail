@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_starrail/main.dart';
 import 'package:flutter_starrail/packs/starrail_colors.dart';
 import 'package:flutter_starrail/packs/starrail_list.dart';
 import 'package:flutter_starrail/packs/starrail_panel.dart';
@@ -7,8 +8,12 @@ import 'chat_header.dart';
 import 'chat_message_line.dart';
 import 'dart:math';
 
+import 'dart:io';
+
+external Socket? socket;
+
 class ChatMainPage extends StatefulWidget {
-  ChatMainPage({super.key});
+  const ChatMainPage({super.key});
 
   @override
   State<ChatMainPage> createState() => ChatMainPageState();
@@ -21,7 +26,9 @@ class ChatMainPageState extends State<ChatMainPage>
   bool panelOpened = false;
 
   ChatMainPageState() {
-    
+    socket!.listen((data) {
+      addMsg(String.fromCharCodes(data));
+    });
   }
 
   void addMsg(String s) async {
@@ -40,6 +47,11 @@ class ChatMainPageState extends State<ChatMainPage>
             }));
 
     setState(() => key.currentState!.pushMsg(tt));
+  }
+
+  void sendMsg(String s) async {
+    socket!.write(s);
+    await socket!.flush();
   }
 
   @override
