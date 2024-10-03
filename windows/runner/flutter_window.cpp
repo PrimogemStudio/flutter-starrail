@@ -16,16 +16,6 @@ FlutterWindow::FlutterWindow(const DartProject& project)
 
 FlutterWindow::~FlutterWindow() {}
 
-static std::string format_time() {
-	auto now = std::chrono::system_clock::now();
-	std::time_t now_time = std::chrono::system_clock::to_time_t(now);
-	std::tm now_tm;
-	(void)localtime_s(&now_tm, &now_time);
-	std::ostringstream oss;
-	oss << std::put_time(&now_tm, "%Y-%m-%d %H:%M:%S");
-	return oss.str();
-}
-
 bool FlutterWindow::OnCreate() {
 	if (!Win32Window::OnCreate()) {
 		return false;

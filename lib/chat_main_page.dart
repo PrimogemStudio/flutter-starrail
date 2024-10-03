@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_starrail/main.dart';
 import 'package:flutter_starrail/packs/starrail_colors.dart';
 import 'package:flutter_starrail/packs/starrail_list.dart';
 import 'package:flutter_starrail/packs/starrail_panel.dart';
 import 'chat_header.dart';
 import 'chat_message_line.dart';
-import 'dart:math';
-
 import 'dart:io';
 
 external Socket? socket;
@@ -62,7 +58,7 @@ class ChatMainPageState extends State<ChatMainPage>
             innerPanel: StarRailPanel(
                 key: panelKey,
                 func: () {
-                  addMsg(panelKey.currentState!.getText());
+                  sendMsg(panelKey.currentState!.getText());
                   panelOpened = false;
                 },
                 onMoving: () => key.currentState!.scrollToBottomImm())),

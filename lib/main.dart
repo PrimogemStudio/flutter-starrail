@@ -2,20 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_starrail/packs/starrail_colors.dart';
 import 'chat_main_page.dart';
 import 'package:flutter/scheduler.dart' show timeDilation;
+import 'package:args/args.dart';
 import 'dart:io';
 
 Socket? socket;
 ServerSocket? serverSocket;
 
-const bool server = false;
+bool server = false;
 
-void main() async {
+void main(List<String> arguments) async {
   timeDilation = 1.5;
+  final parser = ArgParser()
+    ..addOption('server', abbr: 's', help: 'Open as server');
+  final args = parser.parse(arguments);
+  server = args['server'] as bool;
   if (server) {
     serverSocket = await ServerSocket.bind(InternetAddress.anyIPv4, 32767);
-    serverSocket!.listen((s) {
+    await for (var s in serverSocket!) {
       socket = s;
-    });
+      break;
+    }
   } else {
     socket = await Socket.connect("127.0.0.1", 32767);
   }

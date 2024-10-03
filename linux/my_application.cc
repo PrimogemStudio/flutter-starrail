@@ -19,15 +19,6 @@ struct _MyApplication {
 
 G_DEFINE_TYPE(MyApplication, my_application, GTK_TYPE_APPLICATION)
 
-static std::string format_time() {
-  auto now = std::chrono::system_clock::now();
-  std::time_t now_time = std::chrono::system_clock::to_time_t(now);
-  std::tm* now_tm = std::localtime(&now_time);
-  std::ostringstream oss;
-  oss << std::put_time(now_tm, "%Y-%m-%d %H:%M:%S");
-  return oss.str();
-}
-
 // Implements GApplication::activate.
 static void my_application_activate(GApplication* application) {
   MyApplication* self = MY_APPLICATION(application);
