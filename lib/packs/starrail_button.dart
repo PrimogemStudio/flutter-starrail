@@ -7,7 +7,7 @@ var srStyle = ButtonStyle(
         return Color.fromARGB(255, 190, 190, 190);
       }
       else if (states.contains(WidgetState.hovered)) {
-        return Color.fromARGB(255, 245, 245, 245);
+        return Color.fromARGB(255, 250, 250, 250);
       }
       return Color.fromARGB(255, 240, 240, 240);
     }),
