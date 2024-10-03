@@ -23,8 +23,8 @@ void main(List<String> arguments) async {
       break;
     }
   } else {
-    // socket = await Socket.connect("60.215.128.117", 10646);
-    socket = await Socket.connect("127.0.0.1", 32767);
+    socket = await Socket.connect("60.215.128.117", 10646);
+    // socket = await Socket.connect("127.0.0.1", 32767);
   }
   runApp(const MyApp());
 }
