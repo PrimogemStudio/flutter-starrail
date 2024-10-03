@@ -1,11 +1,10 @@
-import 'dart:ffi';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_starrail/packs/starrail_button.dart';
 import 'package:flutter_starrail/packs/starrail_colors.dart';
 
-class StarRailPanel extends StatefulWidget {
+var i = """class StarRailPanel extends StatefulWidget {
   StarRailPanel({
     super.key,
     required this.func,
@@ -57,7 +56,7 @@ class StarRailPanelState extends State<StarRailPanel> with TickerProviderStateMi
   void closePanel() {
     if (widget.panelAnimation == null) init();
     widget.panelAnimation!.stop();
-    widget.panelAnimation!.animateBack(0, curve: Curves.easeInExpo);
+    widget.panelAnimation!.animateTo(0);
   }
 
   String getText() {
@@ -93,5 +92,79 @@ class StarRailPanelState extends State<StarRailPanel> with TickerProviderStateMi
       ))
     ]));
     return Opacity(opacity: panelOpacity, child: i);
+  }
+}""";
+
+class StarRailPanel extends StatefulWidget {
+  StarRailPanel({
+    super.key,
+    required this.func,
+    required this.onMoving
+  });
+
+  AnimationController? animationBase;
+  Function func;
+  Function onMoving;
+
+  @override
+  State<StatefulWidget> createState() => StarRailPanelState();
+}
+
+class StarRailPanelState extends State<StarRailPanel> with TickerProviderStateMixin {
+  TextEditingController textCont = TextEditingController();
+  double mainOpac = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    widget.animationBase = AnimationController(vsync: this, duration: const Duration(milliseconds: 200));
+    widget.animationBase!.addListener(() {
+      setState(() {
+        mainOpac = widget.animationBase!.value;
+      });
+    });
+  }
+
+  void openPanel() {
+    widget.animationBase!.forward(from: 0);
+  }
+
+  void closePanel() {
+    widget.animationBase!.animateTo(0);
+  }
+
+  String getText() {
+    return textCont.text;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    var i = Container(height: 180, color: uiPanelBack, child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+      Container(
+        width: 2147483647,
+        height: 4,
+        decoration: BoxDecoration(
+          shape: BoxShape.rectangle,
+          gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                uiPanelBorder,
+                uiPanelBorderTrans
+              ]),
+        ),
+      ),
+      TextField(controller: textCont),
+      Padding(padding: EdgeInsets.all(5)),
+      Padding(padding: EdgeInsets.all(10), child: ElevatedButton(
+          onPressed: () {
+            closePanel();
+            Future.delayed(Duration(milliseconds: 450), () => widget.func());
+          },
+          style: srStyle,
+          child: const Text("Test!")
+      ))
+    ]));
+    return Opacity(opacity: mainOpac, child: i);
   }
 }
