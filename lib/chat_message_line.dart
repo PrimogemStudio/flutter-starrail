@@ -153,7 +153,7 @@ class ChatMessageLineState extends State<ChatMessageLine> with TickerProviderSta
                   )
                 ))));
     return Padding(
-        padding: const EdgeInsets.only(right: 35),
+        padding: const EdgeInsets.only(),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           textDirection: widget.self ? TextDirection.rtl : TextDirection.ltr,
