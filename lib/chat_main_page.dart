@@ -88,7 +88,7 @@ class ChatMainPageState extends State<ChatMainPage> with TickerProviderStateMixi
                 widget.panelAnimation!.reset();
 
                 widget.panelRt ??= CurveTween(curve: Curves.easeInOutCirc).animate(widget.panelAnimation!);
-                widget.panelTween ??= Tween(begin: 0.0, end: 200.0).animate(widget.panelRt!);
+                widget.panelTween ??= Tween(begin: 0.0, end: 180.0).animate(widget.panelRt!);
                 widget.panelTween!.addListener(() {
                   panelHeight = widget.panelTween!.value;
                   setState(() {
@@ -96,7 +96,7 @@ class ChatMainPageState extends State<ChatMainPage> with TickerProviderStateMixi
                   });
                 });
 
-                widget.panelOpacity ??= Tween(begin: 0.0, end: 1.0).animate(CurveTween(curve: Curves.easeInCubic).animate(widget.panelAnimation!));
+                widget.panelOpacity ??= Tween(begin: 0.0, end: 1.0).animate(CurveTween(curve: Curves.easeInQuint).animate(widget.panelAnimation!));
                 widget.panelOpacity!.addListener(() {
                   panelOpacity = widget.panelOpacity!.value;
                 });
@@ -117,7 +117,7 @@ class ChatMainPageState extends State<ChatMainPage> with TickerProviderStateMixi
   Widget build(BuildContext context) {
     Scaffold sc = Scaffold(
         body: StarRailList(key: key, innerPanel: Opacity(opacity: panelOpacity, child: Container(height: panelHeight, color: Color.fromARGB(
-            255, 223, 223, 223), child: Column(children: [
+            255, 223, 223, 223), child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
           Container(
             width: 2147483647,
             height: 3,
@@ -134,11 +134,11 @@ class ChatMainPageState extends State<ChatMainPage> with TickerProviderStateMixi
           ),
           TextField(),
           Padding(padding: EdgeInsets.all(5)),
-          ElevatedButton(
+          Padding(padding: EdgeInsets.all(10), child: ElevatedButton(
               onPressed: () => widget.panelAnimation!.animateBack(0),
               style: srStyle,
               child: const Text("Test!")
-          )
+          ))
         ])
         ))),
         appBar: AppBar(

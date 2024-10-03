@@ -53,9 +53,7 @@ class StarRailListState extends State<StarRailList> {
   }
 
   void scrollToBottomImm() {
-    _controller.animateTo(_controller.position.maxScrollExtent,
-        duration: const Duration(milliseconds: 20),
-        curve: Curves.easeOutExpo);
+    _controller.jumpTo(_controller.position.maxScrollExtent);
   }
 
   @override
