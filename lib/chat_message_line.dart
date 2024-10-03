@@ -11,7 +11,9 @@ class ChatMessageLine extends StatefulWidget {
       required this.username,
       required this.text,
       required this.msgResv,
-      required this.onLoadComplete});
+      required this.onLoadComplete}) {
+    if (self) msgResv = true;
+  }
 
   final Image avatar;
   final bool self;
@@ -143,9 +145,12 @@ class ChatMessageLineState extends State<ChatMessageLine> with TickerProviderSta
                 color: Colors.transparent,
                 shadowColor: Colors.transparent,
                 margin: const EdgeInsets.fromLTRB(15, 8, 15, 8),
-                child: Text(
-                  widget.text,
-                  style: const TextStyle(color: Colors.black, fontSize: 16.0),
+                child: Container(
+                  constraints: BoxConstraints(minWidth: 10),
+                  child: Text(
+                    widget.text,
+                    style: const TextStyle(color: Colors.black, fontSize: 16.0),
+                  )
                 ))));
     return Padding(
         padding: const EdgeInsets.only(right: 35),
@@ -165,8 +170,7 @@ class ChatMessageLineState extends State<ChatMessageLine> with TickerProviderSta
             Expanded(
                 child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              textDirection:
-                  widget.self ? TextDirection.rtl : TextDirection.ltr,
+              textDirection: widget.self ? TextDirection.rtl : TextDirection.ltr,
               children: <Widget>[
                 Card(
                     color: Colors.transparent,
@@ -178,8 +182,7 @@ class ChatMessageLineState extends State<ChatMessageLine> with TickerProviderSta
                         opacity: widget.animation!,
                         child: Text(widget.username, style: TextStyle(color: uiMsgSrc)))),
                 Stack(
-                    textDirection:
-                        widget.self ? TextDirection.rtl : TextDirection.ltr,
+                    textDirection: widget.self ? TextDirection.rtl : TextDirection.ltr,
                     children: [
                       FadeTransition(
                           opacity: widget.animation!, child: msgMain),

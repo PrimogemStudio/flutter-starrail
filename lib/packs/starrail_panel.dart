@@ -50,7 +50,7 @@ class StarRailPanelState extends State<StarRailPanel> with TickerProviderStateMi
   }
 
   void closePanel() {
-    widget.panelAnimation!.animateBack(0);
+    widget.panelAnimation!.animateBack(0, curve: Curves.easeInExpo);
   }
 
   String getText() {

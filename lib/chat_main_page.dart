@@ -17,6 +17,7 @@ class ChatMainPage extends StatefulWidget {
 class ChatMainPageState extends State<ChatMainPage> with TickerProviderStateMixin {
   GlobalKey<StarRailListState> key = GlobalKey<StarRailListState>();
   GlobalKey<StarRailPanelState> panelKey = GlobalKey<StarRailPanelState>();
+  bool panelOpened = false;
 
   ChatMainPageState() {
     const MethodChannel('MainPage.Event').setMethodCallHandler((call) async {
@@ -71,16 +72,13 @@ class ChatMainPageState extends State<ChatMainPage> with TickerProviderStateMixi
         title: ChatMessageLine(
             avatar: Image.asset("assets/avatars/jack253-png.png",
                 width: 50.0, height: 50.0),
-            self: false,
+            self: true,
             username: "Coder2",
             text: s,
             msgResv: false,
             onLoadComplete: () {
               setState(() {
                 key.currentState!.scrollToBottom();
-              });
-              Future.delayed(Duration(milliseconds: 1500), () {
-                panelKey.currentState!.openPanel();
               });
             }));
 
@@ -91,7 +89,7 @@ class ChatMainPageState extends State<ChatMainPage> with TickerProviderStateMixi
   Widget build(BuildContext context) {
     Scaffold sc = Scaffold(
         body: StarRailList(key: key, innerPanel:
-          StarRailPanel(key: panelKey, func: () { addMsg(panelKey.currentState!.getText()); }, onMoving: () => key.currentState!.scrollToBottomImm())
+          StarRailPanel(key: panelKey, func: () { addMsg(panelKey.currentState!.getText()); panelOpened = false; }, onMoving: () => key.currentState!.scrollToBottomImm())
         ),
         appBar: AppBar(
             backgroundColor: uiSurfaceColor,
@@ -101,9 +99,14 @@ class ChatMainPageState extends State<ChatMainPage> with TickerProviderStateMixi
             scrolledUnderElevation: 0,
             surfaceTintColor: Colors.transparent),
         floatingActionButton: FloatingActionButton(
-          onPressed: () => addMsg("Test!"),
+          onPressed: () {
+            if (!panelOpened) {
+              panelKey.currentState!.openPanel();
+              panelOpened = true;
+            }
+          },
           tooltip: '添加测试信息',
-          child: const Icon(Icons.add),
+          child: const Icon(Icons.add)
         ));
     return ClipRRect(
         borderRadius: const BorderRadius.only(topRight: Radius.circular(30)),
