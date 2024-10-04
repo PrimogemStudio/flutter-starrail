@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_starrail/chat_main_page.dart';
+import 'package:flutter_starrail/chat_messagelist_page.dart';
 import 'package:flutter_starrail/packs/starrail_colors.dart';
 import 'package:flutter_starrail/packs/starrail_dialog.dart';
 import 'package:flutter_starrail/packs/starrail_list.dart';
@@ -23,7 +24,7 @@ class ChatIndeterminatePage extends StatefulWidget {
 class ChatIndeterminatePageState extends State<ChatIndeterminatePage> with TickerProviderStateMixin {
   GlobalKey<ChatMainPageState> mainPageKey = GlobalKey();
   GlobalKey<ChatHeaderState> headerKey = GlobalKey();
-  GlobalKey<StarRailListState> userListKey = GlobalKey();
+  GlobalKey<ChatMessageListPageState> chatMessageListKey = GlobalKey();
   double blur = 0;
 
   @override
@@ -46,7 +47,7 @@ class ChatIndeterminatePageState extends State<ChatIndeterminatePage> with Ticke
         body: Stack(
           children: [
             ChatMainPage(key: mainPageKey),
-            StarRailList(key: userListKey, innerPanel: Container())
+            ChatMessageListPage(key: chatMessageListKey)
           ]
         ),
         appBar: AppBar(
@@ -74,7 +75,7 @@ class ChatIndeterminatePageState extends State<ChatIndeterminatePage> with Ticke
             showSrDialog(context, (x) { updateBlur(x); });
           })),
           withPadding(FloatingActionButton(heroTag: "d", onPressed: () {
-            userListKey.currentState!.pushMsg(ListTile(title: const Text("data")));
+            chatMessageListKey.currentState!.userListKey.currentState!.pushMsg(ListTile(title: const Text("data")));
             headerKey.currentState!.updateText(() {
               headerKey.currentState!.widget.replyer = "所有消息 ${TimeOfDay.now()}";
             });
