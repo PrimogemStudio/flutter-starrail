@@ -13,7 +13,7 @@ class StarRailChatImageDialog extends StatelessWidget {
           borderRadius: BorderRadius.all(Radius.circular(0))
       ),
       title: const Text("提示"),
-      content: const Text("确定删除吗？"),
+      content: Image.network("https://www.imagehub.cc/content/images/system/home_cover_1670160663727_f2dcdb.jpeg"),
       actions: [
         TextButton(
           onPressed: () {

@@ -35,14 +35,17 @@ class ChatIndeterminatePageState extends State<ChatIndeterminatePage> {
           withPadding(FloatingActionButton(
               onPressed: () => mainPageKey.currentState!.openPanel(),
               tooltip: '添加测试信息',
-              child: const Icon(Icons.add))),
+              heroTag: "a",
+              child: const Icon(Icons.add)
+          )),
           withPadding(FloatingActionButton(
               onPressed: () {
                 headerKey.currentState!.updateText(() {});
               },
               tooltip: '测试 Header',
+              heroTag: "b",
               child: const Icon(Icons.edit))),
-          withPadding(FloatingActionButton(onPressed: () {
+          withPadding(FloatingActionButton(heroTag: "c", onPressed: () {
             showSrDialog(context, (x) { updateBlur(x); });
           }))
         ]));

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_starrail/packs/dialogs/starrail_chatimage_dialog.dart';
-import 'package:flutter_starrail/packs/starrail_colors.dart';
 
 void showSrDialog(BuildContext context, Function onAnimation) {
   showGeneralDialog(
