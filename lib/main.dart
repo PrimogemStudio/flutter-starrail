@@ -44,20 +44,24 @@ class LoginScreen extends StatelessWidget {
                   Navigator.pushReplacement(
                       context,
                       PageRouteBuilder(
-                          transitionDuration: Duration(milliseconds: 500),
+                          transitionDuration: Duration(milliseconds: 1000),
                           pageBuilder:
                               (context, animation, secondaryAnimation) =>
                                   const ChatIndeterminatePage(),
                           transitionsBuilder:
                               (context, animation, secondaryAnimation, child) {
+                            var a = CurvedAnimation(
+                                parent: animation,
+                                curve: Curves.easeOutExpo,
+                                reverseCurve: Curves.easeOutExpo);
                             return FadeTransition(
                                 opacity: Tween<double>(begin: 0.0, end: 1.0)
-                                    .animate(animation),
+                                    .animate(a),
                                 child: SlideTransition(
                                     position: Tween<Offset>(
                                             begin: Offset(1.0, 0.0),
                                             end: Offset(0.0, 0.0))
-                                        .animate(animation),
+                                        .animate(a),
                                     child: child));
                           }));
                 })
