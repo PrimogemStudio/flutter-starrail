@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_starrail/packs/starrail_colors.dart';
-import 'packs/rounded_rect.dart';
+import 'rounded_rect.dart';
 import 'dart:math';
 
-class ChatMessageLine extends StatefulWidget {
-  ChatMessageLine(
+class StarRailMessageLine extends StatefulWidget {
+  StarRailMessageLine(
       {super.key,
       required this.avatar,
       required this.self,
@@ -28,10 +28,10 @@ class ChatMessageLine extends StatefulWidget {
   bool msgResv;
 
   @override
-  State<ChatMessageLine> createState() => ChatMessageLineState();
+  State<StarRailMessageLine> createState() => StarRailMessageLineState();
 }
 
-class ChatMessageLineState extends State<ChatMessageLine> with TickerProviderStateMixin {
+class StarRailMessageLineState extends State<StarRailMessageLine> with TickerProviderStateMixin {
   double o = 0;
   double o2 = 0;
   double o3 = 0;

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_starrail/network/socket.dart';
 import 'package:flutter_starrail/packs/starrail_list.dart';
 import 'package:flutter_starrail/packs/starrail_panel.dart';
-import 'chat_message_line.dart';
+import 'packs/starrail_message_line.dart';
 
 const currentUser = "Coder2";
 const currentAvatar = "jack253-png";
@@ -29,7 +29,7 @@ class ChatMainPageState extends State<ChatMainPage>
 
   void addMsg(String msg, String username, String avatar, bool self) async {
     ListTile tt = ListTile(
-        title: ChatMessageLine(
+        title: StarRailMessageLine(
             avatar: Image.asset("assets/avatars/$avatar.png",
                 width: 50.0, height: 50.0),
             self: self,

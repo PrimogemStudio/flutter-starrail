@@ -3,7 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_starrail/packs/rounded_rect.dart';
 
-import '../chat_message_line.dart';
+import 'starrail_message_line.dart';
 import 'starrail_colors.dart';
 
 class StarRailList extends StatefulWidget {
@@ -110,8 +110,8 @@ class StarRailListState extends State<StarRailList> {
       key: key,
       initialItemCount: list.length,
       itemBuilder: (context, index, animation) {
-        if ((list[index] as ListTile).title is ChatMessageLine) {
-          ((list[index] as ListTile).title as ChatMessageLine).animation = animation;
+        if ((list[index] as ListTile).title is StarRailMessageLine) {
+          ((list[index] as ListTile).title as StarRailMessageLine).animation = animation;
         }
         return list[index];
       },
