@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_starrail/chat_main_page.dart';
 import 'package:flutter_starrail/packs/starrail_colors.dart';
@@ -16,6 +18,7 @@ class ChatIndeterminatePage extends StatefulWidget {
 class ChatIndeterminatePageState extends State<ChatIndeterminatePage> {
   GlobalKey<ChatMainPageState> mainPageKey = GlobalKey();
   GlobalKey<ChatHeaderState> headerKey = GlobalKey();
+  double blur = 0;
   @override
   Widget build(BuildContext context) {
     Scaffold sc = Scaffold(
@@ -61,18 +64,33 @@ class ChatIndeterminatePageState extends State<ChatIndeterminatePage> {
               transitionDuration: const Duration(milliseconds: 200),
               transitionBuilder: (BuildContext context, Animation<double> animation,
                   Animation<double> secondaryAnimation, Widget child) {
+                animation.addListener(() { updateBlur(animation.value * 5); });
                 return FadeTransition(opacity: animation, child: SlideTransition(position: Tween<Offset>(
                     begin: const Offset(0, 0.15), end: const Offset(0, 0))
                     .animate(CurvedAnimation(
                     parent: animation,
-                    curve: Curves.easeOutBack,
-                    reverseCurve: Curves.easeOutBack)), child: child));
+                    curve: Curves.easeOutExpo,
+                    reverseCurve: Curves.easeOutExpo)), child: child));
               },
             );
           }))
         ]));
     return ClipRRect(
         borderRadius: const BorderRadius.only(topRight: Radius.circular(30)),
-        child: sc);
+        child: Stack(children: [
+          sc,
+          IgnorePointer(child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
+            child: Container(
+                color: Colors.white.withOpacity(0.01)
+            ),
+          ))
+        ]));
+  }
+
+  void updateBlur(double v) {
+    setState(() {
+      blur = v;
+    });
   }
 }
