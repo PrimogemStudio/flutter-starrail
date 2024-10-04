@@ -39,12 +39,12 @@ class ChatIndeterminatePageState extends State<ChatIndeterminatePage> {
               tooltip: '测试 Header',
               child: const Icon(Icons.edit))),
           withPadding(FloatingActionButton(onPressed: () {
-            showDialog(
+            showGeneralDialog(
               barrierColor: Colors.transparent,
               context: context,
-              builder: (BuildContext context) {
+              pageBuilder:
+                  (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
                 return AlertDialog(
-                  backgroundColor: Colors.red,
                   title: const Text("提示"),
                   content: const Text("确定删除吗？"),
                   actions: [
@@ -57,6 +57,16 @@ class ChatIndeterminatePageState extends State<ChatIndeterminatePage> {
                     TextButton(onPressed: () {}, child: const Text("确定")),
                   ],
                 );
+              },
+              transitionDuration: const Duration(milliseconds: 200),
+              transitionBuilder: (BuildContext context, Animation<double> animation,
+                  Animation<double> secondaryAnimation, Widget child) {
+                return FadeTransition(opacity: animation, child: SlideTransition(position: Tween<Offset>(
+                    begin: const Offset(0, 0.15), end: const Offset(0, 0))
+                    .animate(CurvedAnimation(
+                    parent: animation,
+                    curve: Curves.easeOutBack,
+                    reverseCurve: Curves.easeOutBack)), child: child));
               },
             );
           }))
