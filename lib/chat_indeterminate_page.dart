@@ -38,6 +38,28 @@ class ChatIndeterminatePageState extends State<ChatIndeterminatePage> {
               },
               tooltip: '测试 Header',
               child: const Icon(Icons.edit))),
+          withPadding(FloatingActionButton(onPressed: () {
+            showDialog(
+              barrierColor: Colors.transparent,
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  backgroundColor: Colors.red,
+                  title: const Text("提示"),
+                  content: const Text("确定删除吗？"),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text("取消"),
+                    ),
+                    TextButton(onPressed: () {}, child: const Text("确定")),
+                  ],
+                );
+              },
+            );
+          }))
         ]));
     return ClipRRect(
         borderRadius: const BorderRadius.only(topRight: Radius.circular(30)),
