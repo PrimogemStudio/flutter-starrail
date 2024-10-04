@@ -17,7 +17,7 @@ class StarRailChatImageDialog extends StatelessWidget {
       ),
       content: Stack(alignment: Alignment.bottomCenter, children: [
         Padding(padding: EdgeInsets.only(bottom: 30), child: Image.network("https://www.imagehub.cc/content/images/system/home_cover_1670160663727_f2dcdb.jpeg")),
-        const Text("◉点击任意位置关闭")
+        const Text("◉ 点击任意位置关闭", style: TextStyle(fontFamily: "u2400"))
       ]),
       actions: []
     );

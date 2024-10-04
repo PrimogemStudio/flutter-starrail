@@ -67,6 +67,9 @@ flutter:
     - family: StarRailFont_bundle
       fonts:
         - asset: assets/fonts/StarRailFont.ttf
+    - family: u2400
+      fonts:
+        - asset: assets/fonts/u2400.ttf
 
   # To add assets to your application, add an assets section, like this:
   # assets:
