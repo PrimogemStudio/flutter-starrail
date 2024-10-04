@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_starrail/network/socket.dart';
 import 'package:flutter_starrail/packs/starrail_colors.dart';
@@ -8,7 +6,7 @@ import 'package:flutter/scheduler.dart' show timeDilation;
 
 void main() async {
   timeDilation = 1.5;
-  socket = await Socket.connect("60.215.128.117", 10646);
+  await socketConnect();
   runApp(const MyApp());
 }
 

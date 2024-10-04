@@ -21,8 +21,11 @@ class ChatMainPageState extends State<ChatMainPage>
   bool panelOpened = false;
 
   ChatMainPageState() {
-    socketRecv(
-        (json) => addMsg(json["msg"], json["username"], json["avatar"], false));
+    socketSend(LoginPacket(username: currentUser, avatar: currentAvatar));
+    handlePacker(RecvMessagePacket, (packet) {
+      packet as RecvMessagePacket;
+      addMsg(packet.message, packet.user, packet.avatar, false);
+    });
   }
 
   void addMsg(String msg, String username, String avatar, bool self) async {
@@ -45,7 +48,7 @@ class ChatMainPageState extends State<ChatMainPage>
 
   void sendMsg(String s) {
     addMsg(s, currentUser, currentAvatar, true);
-    socketSend({"msg": s, "username": currentUser, "avatar": currentAvatar});
+    socketSend(SendMessagePacket(message: s));
   }
 
   void openPanel() {
