@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_starrail/network/socket.dart';
+import 'package:flutter_starrail/packs/starrail_button.dart';
 import 'package:flutter_starrail/packs/starrail_colors.dart';
 import 'chat_indeterminate_page.dart';
 import 'package:flutter/scheduler.dart' show timeDilation;
@@ -18,13 +19,14 @@ class LoginScreen extends StatelessWidget {
     return Scaffold(
       body: Center(
         child: ElevatedButton(
-          child: Text('Login'),
+          style: srStyle,
           onPressed: () {
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
                     builder: (context) => const ChatIndeterminatePage()));
           },
+          child: Text('Login'),
         ),
       ),
     );
