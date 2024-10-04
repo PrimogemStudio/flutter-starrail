@@ -49,7 +49,7 @@ class LoginScreen extends StatelessWidget {
                           transitionDuration: Duration(milliseconds: 1000),
                           pageBuilder:
                               (context, animation, secondaryAnimation) =>
-                                  const ChatIndeterminatePage(),
+                                  ChatIndeterminatePage(),
                           transitionsBuilder:
                               (context, animation, secondaryAnimation, child) {
                             var a = CurvedAnimation(

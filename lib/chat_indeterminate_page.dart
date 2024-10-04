@@ -4,31 +4,56 @@ import 'package:flutter/material.dart';
 import 'package:flutter_starrail/chat_main_page.dart';
 import 'package:flutter_starrail/packs/starrail_colors.dart';
 import 'package:flutter_starrail/packs/starrail_dialog.dart';
+import 'package:flutter_starrail/packs/starrail_list.dart';
 import 'package:flutter_starrail/packs/utils.dart';
 
 import 'chat_header.dart';
 
 class ChatIndeterminatePage extends StatefulWidget {
-  const ChatIndeterminatePage({
+  ChatIndeterminatePage({
     super.key
   });
+
+  AnimationController? mainAnimation;
+
   @override
   State<StatefulWidget> createState() => ChatIndeterminatePageState();
 }
 
-class ChatIndeterminatePageState extends State<ChatIndeterminatePage> {
+class ChatIndeterminatePageState extends State<ChatIndeterminatePage> with TickerProviderStateMixin {
   GlobalKey<ChatMainPageState> mainPageKey = GlobalKey();
   GlobalKey<ChatHeaderState> headerKey = GlobalKey();
+  GlobalKey<StarRailListState> userListKey = GlobalKey();
   double blur = 0;
+
+  @override
+  void initState() {
+    super.initState();
+
+    widget.mainAnimation = AnimationController(vsync: this, duration: const Duration(milliseconds: 250));
+  }
+
+  @override
+  void didUpdateWidget(covariant ChatIndeterminatePage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    widget.mainAnimation = oldWidget.mainAnimation;
+  }
+
   @override
   Widget build(BuildContext context) {
     Scaffold sc = Scaffold(
-        body: ChatMainPage(key: mainPageKey),
+        body: Stack(
+          children: [
+            ChatMainPage(key: mainPageKey),
+            StarRailList(key: userListKey, innerPanel: Container())
+          ]
+        ),
         appBar: AppBar(
             backgroundColor: uiSurfaceColor,
             shadowColor: Colors.transparent,
             elevation: 0,
-            title: ChatHeader(key: headerKey),
+            title: ChatHeader(key: headerKey, replyer: "", replyerDesc: ""),
             scrolledUnderElevation: 0,
             surfaceTintColor: Colors.transparent),
         floatingActionButton: Column(mainAxisAlignment: MainAxisAlignment.end, children: [
@@ -47,6 +72,12 @@ class ChatIndeterminatePageState extends State<ChatIndeterminatePage> {
               child: const Icon(Icons.edit))),
           withPadding(FloatingActionButton(heroTag: "c", onPressed: () {
             showSrDialog(context, (x) { updateBlur(x); });
+          })),
+          withPadding(FloatingActionButton(heroTag: "d", onPressed: () {
+            userListKey.currentState!.pushMsg(ListTile(title: const Text("data")));
+            headerKey.currentState!.updateText(() {
+              headerKey.currentState!.widget.replyer = "所有消息 ${TimeOfDay.now()}";
+            });
           }))
         ]));
     return ClipRRect(

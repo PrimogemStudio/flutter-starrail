@@ -6,7 +6,10 @@ const replyer = "hackerm大神";
 const replyerDesc = "一个一般路过的普通开发者~";
 
 class ChatHeader extends StatefulWidget {
-  ChatHeader({super.key});
+  ChatHeader({super.key, required this.replyer, required this.replyerDesc});
+
+  String replyer;
+  String replyerDesc;
 
   AnimationController? mainAnimation;
   Animation<double>? opacityAnimation;
@@ -43,8 +46,8 @@ class ChatHeaderState extends State<ChatHeader> with TickerProviderStateMixin {
     var c = widget.mainAnimation!;
 
     c.reverse();
-    t();
     Future.delayed(Duration(milliseconds: 700), () {
+      setState(() => t());
       c.forward();
     });
   }
@@ -55,6 +58,6 @@ class ChatHeaderState extends State<ChatHeader> with TickerProviderStateMixin {
         color: Colors.transparent,
         shadowColor: Colors.transparent,
         margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-        child: HeaderChatting(replyer: replyer, replyerDesc: replyerDesc))));
+        child: HeaderChatting(replyer: widget.replyer, replyerDesc: widget.replyerDesc))));
   }
 }
