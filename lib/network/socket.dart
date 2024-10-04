@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 
 Socket? socket;
-ServerSocket? serverSocket;
 
 bool server = false;
 
