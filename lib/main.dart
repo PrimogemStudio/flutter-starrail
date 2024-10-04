@@ -12,43 +12,57 @@ void main() async {
 }
 
 class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+  final username = TextEditingController();
+  final password = TextEditingController();
+
+  LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: ElevatedButton(
-          style: srStyle,
-          onPressed: () {
-            Navigator.pushReplacement(
-                context,
-                PageRouteBuilder(
-                  transitionDuration: Duration(milliseconds: 500),
-                  pageBuilder: (context, animation, secondaryAnimation) =>
-                      const ChatIndeterminatePage(),
-                  transitionsBuilder:
-                      (context, animation, secondaryAnimation, child) {
-                    return FadeTransition(
-                      opacity: Tween<double>(
-                        begin: 0.0,
-                        end: 1.0,
-                      ).animate(animation),
-                      child: SlideTransition(
-                        position: Tween<Offset>(
-                          begin: Offset(1.0, 0.0),
-                          end: Offset(0.0, 0.0),
-                        ).animate(animation),
-                        child: child,
-                      ),
-                    );
-                  },
-                ));
-          },
-          child: Text('Login'),
-        ),
-      ),
-    );
+        body: Center(
+      child: SizedBox(
+          width: MediaQuery.of(context).size.width / 2,
+          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+            TextField(
+                controller: username,
+                decoration: InputDecoration(
+                  hintText: '用户名',
+                )),
+            Padding(padding: EdgeInsets.all(5)),
+            TextField(
+                controller: password,
+                obscureText: true,
+                decoration: InputDecoration(
+                  hintText: '密码',
+                )),
+            Padding(padding: EdgeInsets.all(5)),
+            ElevatedButton(
+                style: srStyle,
+                child: Text('登录'),
+                onPressed: () {
+                  Navigator.pushReplacement(
+                      context,
+                      PageRouteBuilder(
+                          transitionDuration: Duration(milliseconds: 500),
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) =>
+                                  const ChatIndeterminatePage(),
+                          transitionsBuilder:
+                              (context, animation, secondaryAnimation, child) {
+                            return FadeTransition(
+                                opacity: Tween<double>(begin: 0.0, end: 1.0)
+                                    .animate(animation),
+                                child: SlideTransition(
+                                    position: Tween<Offset>(
+                                            begin: Offset(1.0, 0.0),
+                                            end: Offset(0.0, 0.0))
+                                        .animate(animation),
+                                    child: child));
+                          }));
+                })
+          ])),
+    ));
   }
 }
 
@@ -64,7 +78,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.light(surface: uiSurfaceColor),
           useMaterial3: true,
           fontFamily: "StarRailFont_bundle"),
-      home: const LoginScreen(),
+      home: LoginScreen(),
     );
   }
 }
