@@ -110,8 +110,9 @@ class StarRailListState extends State<StarRailList> {
       key: key,
       initialItemCount: list.length,
       itemBuilder: (context, index, animation) {
-        ((list[index] as ListTile).title as ChatMessageLine).animation =
-            animation;
+        if ((list[index] as ListTile).title is ChatMessageLine) {
+          ((list[index] as ListTile).title as ChatMessageLine).animation = animation;
+        }
         return list[index];
       },
       controller: _controller,
