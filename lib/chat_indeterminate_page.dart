@@ -44,10 +44,16 @@ class ChatIndeterminatePageState extends State<ChatIndeterminatePage> {
           withPadding(FloatingActionButton(onPressed: () {
             showGeneralDialog(
               barrierColor: Colors.transparent,
+              barrierDismissible: true,
+              barrierLabel: "",
               context: context,
               pageBuilder:
                   (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
                 return AlertDialog(
+                  backgroundColor: uiDialogBg,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(0))
+                  ),
                   title: const Text("提示"),
                   content: const Text("确定删除吗？"),
                   actions: [
@@ -66,7 +72,7 @@ class ChatIndeterminatePageState extends State<ChatIndeterminatePage> {
                   Animation<double> secondaryAnimation, Widget child) {
                 animation.addListener(() { updateBlur(animation.value * 5); });
                 return FadeTransition(opacity: animation, child: SlideTransition(position: Tween<Offset>(
-                    begin: const Offset(0, 0.15), end: const Offset(0, 0))
+                    begin: const Offset(0, 0.1), end: const Offset(0, 0))
                     .animate(CurvedAnimation(
                     parent: animation,
                     curve: Curves.easeOutExpo,

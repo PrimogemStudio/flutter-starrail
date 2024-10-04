@@ -18,3 +18,5 @@ var uiViewBarBg = Color.fromARGB(255, 215, 215, 215);
 var uiBtnBg = Color.fromARGB(255, 240, 240, 240);
 var uiBtnBgHover = Color.fromARGB(255, 250, 250, 250);
 var uiBtnBgPressed = Color.fromARGB(255, 210, 210, 210);
+
+var uiDialogBg = Color.fromARGB(255, 244, 242, 250);
