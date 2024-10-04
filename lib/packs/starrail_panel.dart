@@ -30,7 +30,7 @@ class StarRailPanelState extends State<StarRailPanel> with TickerProviderStateMi
   @override
   void initState() {
     super.initState();
-    widget.animationBase = AnimationController(vsync: this, duration: const Duration(milliseconds: 500));
+    widget.animationBase = AnimationController(vsync: this, duration: const Duration(milliseconds: 350));
 
     widget.panelRt = CurveTween(curve: Curves.fastOutSlowIn).animate(widget.animationBase!);
     widget.panelTween = Tween(begin: 0.0, end: 180.0).animate(widget.panelRt!);
@@ -91,7 +91,7 @@ class StarRailPanelState extends State<StarRailPanel> with TickerProviderStateMi
       Padding(padding: EdgeInsets.all(10), child: ElevatedButton(
           onPressed: () {
             closePanel();
-            Future.delayed(Duration(milliseconds: 450), () => widget.func());
+            Future.delayed(Duration(milliseconds: 500), () => widget.func());
           },
           style: srStyle,
           child: const Text("Test!")
