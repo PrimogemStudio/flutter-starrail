@@ -10,6 +10,27 @@ void main() async {
   runApp(const MyApp());
 }
 
+class LoginScreen extends StatelessWidget {
+  const LoginScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: ElevatedButton(
+          child: Text('Login'),
+          onPressed: () {
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const ChatIndeterminatePage()));
+          },
+        ),
+      ),
+    );
+  }
+}
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -22,7 +43,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.light(surface: uiSurfaceColor),
           useMaterial3: true,
           fontFamily: "StarRailFont_bundle"),
-      home: ChatIndeterminatePage(),
+      home: const LoginScreen(),
     );
   }
 }
