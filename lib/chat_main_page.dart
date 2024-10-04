@@ -21,7 +21,6 @@ class ChatMainPageState extends State<ChatMainPage>
   bool panelOpened = false;
 
   ChatMainPageState() {
-    socketSend(LoginPacket(username: currentUser, avatar: currentAvatar));
     handlePacker(RecvMessagePacket, (packet) {
       packet as RecvMessagePacket;
       addMsg(packet.message, packet.user, packet.avatar, false);

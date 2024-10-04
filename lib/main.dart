@@ -5,9 +5,8 @@ import 'package:flutter_starrail/packs/starrail_colors.dart';
 import 'chat_indeterminate_page.dart';
 import 'package:flutter/scheduler.dart' show timeDilation;
 
-void main() async {
+void main() {
   timeDilation = 1.5;
-  await socketConnect();
   runApp(const MyApp());
 }
 
@@ -40,7 +39,10 @@ class LoginScreen extends StatelessWidget {
             ElevatedButton(
                 style: srStyle,
                 child: Text('登录'),
-                onPressed: () {
+                onPressed: () async {
+                  await socketConnect();
+                  socketSend(LoginPacket(
+                      username: username.text, password: password.text));
                   Navigator.pushReplacement(
                       context,
                       PageRouteBuilder(

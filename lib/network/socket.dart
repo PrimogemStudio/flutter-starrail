@@ -21,14 +21,14 @@ class Handler {
 
 class LoginPacket implements Packet {
   String username;
-  String avatar;
+  String password;
 
-  LoginPacket({required this.username, required this.avatar});
+  LoginPacket({required this.username, required this.password});
 
   @override
   void write(Socket socket) {
     var un = utf8.encode(username);
-    var av = utf8.encode(avatar);
+    var av = utf8.encode(password);
     var buf = ByteData(2 + un.length + av.length);
     var byteView = buf.buffer.asUint8List();
     buf.setUint8(0, 1);
