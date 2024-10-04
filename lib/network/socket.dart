@@ -46,8 +46,13 @@ class SendMessagePacket implements Packet {
 
   @override
   void write(Socket socket) {
-    socket.write(2);
-    socket.write(message);
+    var msg = utf8.encode(message);
+    var buf = ByteData(5 + msg.length);
+    var byteView = buf.buffer.asUint8List();
+    buf.setUint8(0, 2);
+    buf.setUint32(1, msg.length.toUnsigned(32), Endian.host);
+    byteView.setAll(5, msg);
+    socket.add(byteView);
   }
 }
 
