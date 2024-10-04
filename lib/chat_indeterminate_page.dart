@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_starrail/chat_main_page.dart';
 import 'package:flutter_starrail/packs/starrail_colors.dart';
+import 'package:flutter_starrail/packs/utils.dart';
 
 import 'chat_header.dart';
 
@@ -26,12 +27,12 @@ class ChatIndeterminatePageState extends State<ChatIndeterminatePage> {
             title: ChatHeader(key: headerKey),
             scrolledUnderElevation: 0,
             surfaceTintColor: Colors.transparent),
-        floatingActionButton: Column(children: [
-          FloatingActionButton(
+        floatingActionButton: Column(mainAxisAlignment: MainAxisAlignment.end, children: [
+          withPadding(FloatingActionButton(
               onPressed: () => mainPageKey.currentState!.openPanel(),
               tooltip: '添加测试信息',
-              child: const Icon(Icons.add)),
-          FloatingActionButton(
+              child: const Icon(Icons.add))),
+          withPadding(FloatingActionButton(
               onPressed: () {
                 var c = headerKey.currentState!.widget.mainAnimation!;
 
@@ -39,7 +40,7 @@ class ChatIndeterminatePageState extends State<ChatIndeterminatePage> {
                 else { c.animateTo(1); }
               },
               tooltip: '测试 Header',
-              child: const Icon(Icons.edit)),
+              child: const Icon(Icons.edit))),
         ]));
     return ClipRRect(
         borderRadius: const BorderRadius.only(topRight: Radius.circular(30)),
