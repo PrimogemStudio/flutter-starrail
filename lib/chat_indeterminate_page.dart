@@ -34,10 +34,7 @@ class ChatIndeterminatePageState extends State<ChatIndeterminatePage> {
               child: const Icon(Icons.add))),
           withPadding(FloatingActionButton(
               onPressed: () {
-                var c = headerKey.currentState!.widget.mainAnimation!;
-
-                if (c.value == 1) { c.animateBack(0); }
-                else { c.animateTo(1); }
+                headerKey.currentState!.updateText(() {});
               },
               tooltip: '测试 Header',
               child: const Icon(Icons.edit))),
