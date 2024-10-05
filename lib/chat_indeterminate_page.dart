@@ -32,6 +32,9 @@ class ChatIndeterminatePageState extends State<ChatIndeterminatePage> with Ticke
     super.initState();
 
     widget.mainAnimation = AnimationController(vsync: this, duration: const Duration(milliseconds: 250));
+    widget.mainAnimation!.addListener(() {
+      setState(() {});
+    });
     widget.mainAnimation!.forward();
   }
 
@@ -48,7 +51,7 @@ class ChatIndeterminatePageState extends State<ChatIndeterminatePage> with Ticke
         body: Stack(
           children: [
             ChatMainPage(key: mainPageKey),
-            IgnorePointer(ignoring: widget.mainAnimation!.value != 0, child: FadeTransition(opacity: widget.mainAnimation!, child: ChatMessageListPage(key: chatMessageListKey)))
+            IgnorePointer(ignoring: widget.mainAnimation!.value == 0, child: FadeTransition(opacity: widget.mainAnimation!, child: ChatMessageListPage(key: chatMessageListKey)))
           ]
         ),
         appBar: AppBar(
