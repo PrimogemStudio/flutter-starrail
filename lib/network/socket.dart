@@ -76,6 +76,22 @@ class RecvMessagePacket implements Packet {
   }
 }
 
+class RecvAvatarPacket implements Packet {
+  late int id;
+  late Uint8List data;
+
+  RecvAvatarPacket(Uint8List data) {
+    var view = data.buffer.asByteData();
+    id = view.getUint16(1, Endian.host);
+    this.data = data.buffer.asUint8List(3);
+  }
+
+  @override
+  void write(Socket socket) {
+    throw UnimplementedError("unsupported");
+  }
+}
+
 void handlePacker(Type type, void Function(Packet) callback) {
   handlers.add(Handler(type: type, callback: callback));
 }
@@ -92,6 +108,11 @@ Future<void> socketConnect() async {
           if (h.type == RecvMessagePacket) h.callback(p);
         }
         break;
+      case 2:
+        var p = RecvAvatarPacket(data);
+        for (var h in handlers) {
+          if (h.type == RecvAvatarPacket) h.callback(p);
+        }
     }
   });
 }

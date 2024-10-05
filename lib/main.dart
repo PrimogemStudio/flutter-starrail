@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_starrail/network/avatar_manager.dart';
 import 'package:flutter_starrail/network/socket.dart';
 import 'package:flutter_starrail/packs/starrail_button.dart';
 import 'package:flutter_starrail/packs/starrail_colors.dart';
@@ -41,6 +42,7 @@ class LoginScreen extends StatelessWidget {
                 child: Text('登录'),
                 onPressed: () async {
                   await socketConnect();
+                  handlePacker(RecvAvatarPacket, AvatarManager.handle);
                   socketSend(LoginPacket(
                       username: username.text, password: password.text));
                   Navigator.pushReplacement(
