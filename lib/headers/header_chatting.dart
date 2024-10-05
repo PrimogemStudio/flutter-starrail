@@ -17,7 +17,7 @@ class HeaderChatting extends StatelessWidget {
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(replyer, style: TextStyle(fontSize: 18)),
+          Text(replyer, style: TextStyle(fontSize: withDesc ? 18 : 20)),
           withDesc ? Text(replyerDesc, style: TextStyle(fontSize: 13, color: Colors.grey)) : Container()
         ]);
   }

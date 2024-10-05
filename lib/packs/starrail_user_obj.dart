@@ -19,6 +19,6 @@ class StarRailUserObject extends StatefulWidget implements AnimatableObj {
 class StarRailUserObjectState extends State<StarRailUserObject> {
   @override
   Widget build(BuildContext context) {
-    return Text("datattt");
+    return FadeTransition(opacity: widget.animation!, child: Card(child: Text("data")));
   }
 }
