@@ -11,7 +11,9 @@ import 'package:flutter_starrail/packs/utils.dart';
 import 'chat_header.dart';
 
 class ChatIndeterminatePage extends StatefulWidget {
-  ChatIndeterminatePage({super.key});
+  ChatIndeterminatePage({
+    super.key
+  });
 
   AnimationController? mainAnimation;
 
@@ -19,8 +21,7 @@ class ChatIndeterminatePage extends StatefulWidget {
   State<StatefulWidget> createState() => ChatIndeterminatePageState();
 }
 
-class ChatIndeterminatePageState extends State<ChatIndeterminatePage>
-    with TickerProviderStateMixin {
+class ChatIndeterminatePageState extends State<ChatIndeterminatePage> with TickerProviderStateMixin {
   GlobalKey<ChatMainPageState> mainPageKey = GlobalKey();
   GlobalKey<ChatHeaderState> headerKey = GlobalKey();
   GlobalKey<ChatMessageListPageState> chatMessageListKey = GlobalKey();
@@ -29,8 +30,8 @@ class ChatIndeterminatePageState extends State<ChatIndeterminatePage>
   @override
   void initState() {
     super.initState();
-    widget.mainAnimation = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 250));
+
+    widget.mainAnimation = AnimationController(vsync: this, duration: const Duration(milliseconds: 250));
   }
 
   @override
@@ -43,10 +44,12 @@ class ChatIndeterminatePageState extends State<ChatIndeterminatePage>
   @override
   Widget build(BuildContext context) {
     Scaffold sc = Scaffold(
-        body: Stack(children: [
-          ChatMainPage(key: mainPageKey),
-          ChatMessageListPage(key: chatMessageListKey)
-        ]),
+        body: Stack(
+          children: [
+            ChatMainPage(key: mainPageKey),
+            ChatMessageListPage(key: chatMessageListKey)
+          ]
+        ),
         appBar: AppBar(
             backgroundColor: uiSurfaceColor,
             shadowColor: Colors.transparent,
@@ -54,29 +57,37 @@ class ChatIndeterminatePageState extends State<ChatIndeterminatePage>
             title: ChatHeader(key: headerKey, replyer: "", replyerDesc: ""),
             scrolledUnderElevation: 0,
             surfaceTintColor: Colors.transparent),
-        floatingActionButton:
-            Column(mainAxisAlignment: MainAxisAlignment.end, children: [
+        floatingActionButton: Column(mainAxisAlignment: MainAxisAlignment.end, children: [
           withPadding(FloatingActionButton(
               onPressed: () => mainPageKey.currentState!.openPanel(),
               tooltip: '添加测试信息',
               heroTag: "a",
-              child: const Icon(Icons.add))),
+              child: const Icon(Icons.add)
+          )),
           withPadding(FloatingActionButton(
-              heroTag: "c",
               onPressed: () {
-                showSrDialog(context, (x) {
-                  updateBlur(x);
-                });
-              }))
+                headerKey.currentState!.updateText(() {});
+              },
+              tooltip: '测试 Header',
+              heroTag: "b",
+              child: const Icon(Icons.edit))),
+          withPadding(FloatingActionButton(heroTag: "c", onPressed: () {
+            showSrDialog(context, (x) { updateBlur(x); });
+          })),
+          withPadding(FloatingActionButton(heroTag: "d", onPressed: () {
+            chatMessageListKey.currentState!.userListKey.currentState!.pushMsg(ListTile(title: StarRailUserObject()));
+            headerKey.currentState!.updateText(() {});
+          }))
         ]));
     return ClipRRect(
         borderRadius: const BorderRadius.only(topRight: Radius.circular(30)),
         child: Stack(children: [
           sc,
-          IgnorePointer(
-              child: BackdropFilter(
+          IgnorePointer(child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
-            child: Container(color: Colors.white.withOpacity(0.01)),
+            child: Container(
+                color: Colors.white.withOpacity(0.01)
+            ),
           ))
         ]));
   }
