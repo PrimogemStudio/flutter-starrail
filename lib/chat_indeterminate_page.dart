@@ -79,7 +79,7 @@ class ChatIndeterminatePageState extends State<ChatIndeterminatePage> with Ticke
             showSrDialog(context, (x) { updateBlur(x); });
           })),
           withPadding(FloatingActionButton(heroTag: "d", onPressed: () {
-            chatMessageListKey.currentState!.userListKey.currentState!.pushMsg(ListTile(title: StarRailUserObject()));
+            chatMessageListKey.currentState!.userListKey.currentState!.pushMsg(ListTile(title: StarRailUserObject(avatar: Image.asset("assets/avatars/jack253-png.png", width: 50.0, height: 50.0), title: "Coder2", subtitle: "Test!")));
             headerKey.currentState!.updateText(() {});
           })),
           withPadding(FloatingActionButton(heroTag: "e", onPressed: () {
