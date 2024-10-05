@@ -5,7 +5,7 @@ import 'package:flutter_starrail/chat_main_page.dart';
 import 'package:flutter_starrail/chat_messagelist_page.dart';
 import 'package:flutter_starrail/packs/starrail_colors.dart';
 import 'package:flutter_starrail/packs/starrail_dialog.dart';
-import 'package:flutter_starrail/packs/starrail_list.dart';
+import 'package:flutter_starrail/packs/starrail_user_obj.dart';
 import 'package:flutter_starrail/packs/utils.dart';
 
 import 'chat_header.dart';
@@ -75,9 +75,10 @@ class ChatIndeterminatePageState extends State<ChatIndeterminatePage> with Ticke
             showSrDialog(context, (x) { updateBlur(x); });
           })),
           withPadding(FloatingActionButton(heroTag: "d", onPressed: () {
-            chatMessageListKey.currentState!.userListKey.currentState!.pushMsg(ListTile(title: const Text("data")));
+            chatMessageListKey.currentState!.userListKey.currentState!.pushMsg(ListTile(title: StarRailUserObject()));
             headerKey.currentState!.updateText(() {
               headerKey.currentState!.widget.replyer = "所有消息 ${TimeOfDay.now()}";
+              headerKey.currentState!.widget.withDesc = false;
             });
           }))
         ]));

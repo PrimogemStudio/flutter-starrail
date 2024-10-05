@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_starrail/packs/starrail_colors.dart';
+import '../animatable.dart';
 import 'rounded_rect.dart';
 import 'dart:math';
 
-class StarRailMessageLine extends StatefulWidget {
+class StarRailMessageLine extends StatefulWidget implements AnimatableObj {
   StarRailMessageLine(
       {super.key,
       required this.avatar,
@@ -29,6 +30,11 @@ class StarRailMessageLine extends StatefulWidget {
 
   @override
   State<StarRailMessageLine> createState() => StarRailMessageLineState();
+
+  @override
+  void setAnimation(Animation<double> a) {
+    animation = a;
+  }
 }
 
 class StarRailMessageLineState extends State<StarRailMessageLine> with TickerProviderStateMixin {

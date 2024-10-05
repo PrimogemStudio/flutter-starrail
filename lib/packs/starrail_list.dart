@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_starrail/animatable.dart';
 import 'package:flutter_starrail/packs/rounded_rect.dart';
 
 import 'starrail_message_line.dart';
@@ -110,9 +111,10 @@ class StarRailListState extends State<StarRailList> {
       key: key,
       initialItemCount: list.length,
       itemBuilder: (context, index, animation) {
-        if ((list[index] as ListTile).title is StarRailMessageLine) {
-          ((list[index] as ListTile).title as StarRailMessageLine).animation = animation;
+        if ((list[index] as ListTile).title is AnimatableObj) {
+          ((list[index] as ListTile).title as AnimatableObj).setAnimation(animation);
         }
+
         return list[index];
       },
       controller: _controller,

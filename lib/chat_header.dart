@@ -10,6 +10,7 @@ class ChatHeader extends StatefulWidget {
 
   String replyer;
   String replyerDesc;
+  bool withDesc = false;
 
   AnimationController? mainAnimation;
   Animation<double>? opacityAnimation;
@@ -58,6 +59,6 @@ class ChatHeaderState extends State<ChatHeader> with TickerProviderStateMixin {
         color: Colors.transparent,
         shadowColor: Colors.transparent,
         margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-        child: HeaderChatting(replyer: widget.replyer, replyerDesc: widget.replyerDesc))));
+        child: HeaderChatting(replyer: widget.replyer, replyerDesc: widget.replyerDesc, withDesc: widget.withDesc))));
   }
 }
