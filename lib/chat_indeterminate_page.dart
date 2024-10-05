@@ -32,6 +32,7 @@ class ChatIndeterminatePageState extends State<ChatIndeterminatePage> with Ticke
     super.initState();
 
     widget.mainAnimation = AnimationController(vsync: this, duration: const Duration(milliseconds: 250));
+    widget.mainAnimation!.forward();
   }
 
   @override
@@ -47,7 +48,7 @@ class ChatIndeterminatePageState extends State<ChatIndeterminatePage> with Ticke
         body: Stack(
           children: [
             ChatMainPage(key: mainPageKey),
-            ChatMessageListPage(key: chatMessageListKey)
+            IgnorePointer(child: FadeTransition(opacity: widget.mainAnimation!, child: ChatMessageListPage(key: chatMessageListKey)))
           ]
         ),
         appBar: AppBar(
@@ -77,6 +78,11 @@ class ChatIndeterminatePageState extends State<ChatIndeterminatePage> with Ticke
           withPadding(FloatingActionButton(heroTag: "d", onPressed: () {
             chatMessageListKey.currentState!.userListKey.currentState!.pushMsg(ListTile(title: StarRailUserObject()));
             headerKey.currentState!.updateText(() {});
+          })),
+          withPadding(FloatingActionButton(heroTag: "e", onPressed: () {
+            setState(() {
+              widget.mainAnimation!.value == 0 ? widget.mainAnimation!.forward() : widget.mainAnimation!.reverse();
+            });
           }))
         ]));
     return ClipRRect(

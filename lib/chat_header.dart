@@ -54,6 +54,8 @@ class ChatHeaderState extends State<ChatHeader> with TickerProviderStateMixin {
     widget.mainAnimation = oldWidget.mainAnimation;
     widget.opacityAnimation = oldWidget.opacityAnimation;
     widget.offsetAnimation = oldWidget.offsetAnimation;
+    widget.replyer = oldWidget.replyer;
+    widget.replyerDesc = oldWidget.replyerDesc;
   }
 
   void updateText(Function t) async {
