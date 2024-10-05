@@ -12,6 +12,6 @@ class ChatMessageListPageState extends State<ChatMessageListPage> {
   GlobalKey<StarRailListState> userListKey = GlobalKey();
   @override
   Widget build(BuildContext context) {
-    return Container(color: Colors.cyanAccent.withOpacity(0.5), child: StarRailList(key: userListKey, innerPanel: Container()));
+    return Opacity(opacity: 0.5, child: StarRailList(key: userListKey, innerPanel: Container()));
   }
 }

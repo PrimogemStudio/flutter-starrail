@@ -44,7 +44,6 @@ class ChatIndeterminatePageState extends State<ChatIndeterminatePage> with Ticke
 
   @override
   Widget build(BuildContext context) {
-    print(widget.mainAnimation!.value == 0);
     Scaffold sc = Scaffold(
         body: Stack(
           children: [
