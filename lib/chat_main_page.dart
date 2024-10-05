@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_starrail/network/avatar_manager.dart';
 import 'package:flutter_starrail/network/socket.dart';
 import 'package:flutter_starrail/packs/starrail_list.dart';
 import 'package:flutter_starrail/packs/starrail_panel.dart';
@@ -23,8 +24,25 @@ class ChatMainPageState extends State<ChatMainPage>
   ChatMainPageState() {
     handlePacker(RecvMessagePacket, (packet) {
       packet as RecvMessagePacket;
-      addMsg(packet.message, packet.user, packet.avatar, false);
+      addRecvMsg(packet.message, packet.user, packet.avatar, false);
     });
+  }
+
+  void addRecvMsg(String msg, String username, int avatar, bool self) async {
+    ListTile tt = ListTile(
+        title: StarRailMessageLine(
+            avatar: AvatarManager.avatars[avatar]!,
+            self: self,
+            username: username,
+            text: msg,
+            msgResv: false,
+            onLoadComplete: () {
+              setState(() {
+                key.currentState!.scrollToBottom();
+              });
+            }));
+
+    setState(() => key.currentState!.pushMsg(tt));
   }
 
   void addMsg(String msg, String username, String avatar, bool self) async {

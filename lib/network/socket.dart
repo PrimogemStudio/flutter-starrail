@@ -59,7 +59,7 @@ class SendMessagePacket implements Packet {
 class RecvMessagePacket implements Packet {
   late String message;
   late String user;
-  late String avatar;
+  late int avatar;
 
   RecvMessagePacket(Uint8List data) {
     var view = data.buffer.asByteData();
@@ -67,7 +67,7 @@ class RecvMessagePacket implements Packet {
     var len = view.getUint8(5);
     message = utf8.decode(data.buffer.asUint8List(6, size));
     user = utf8.decode(data.buffer.asUint8List(6 + size, len));
-    avatar = utf8.decode(data.buffer.asUint8List(6 + size + len));
+    avatar = view.getUint16(6 + size + len, Endian.host);
   }
 
   @override
