@@ -5,8 +5,8 @@ import 'package:flutter_starrail/packs/starrail_list.dart';
 import 'package:flutter_starrail/packs/starrail_panel.dart';
 import 'packs/starrail_message_line.dart';
 
-const currentUser = "Coder2";
-const currentAvatar = "jack253-png";
+var currentUser = "";
+int currentAvatar = 0;
 
 class ChatMainPage extends StatefulWidget {
   const ChatMainPage({super.key});
@@ -24,32 +24,14 @@ class ChatMainPageState extends State<ChatMainPage>
   ChatMainPageState() {
     handlePacker(RecvMessagePacket, (packet) {
       packet as RecvMessagePacket;
-      addRecvMsg(packet.message, packet.user, packet.avatar, false);
+      addMsg(packet.message, packet.user, packet.avatar, false);
     });
   }
 
-  void addRecvMsg(String msg, String username, int avatar, bool self) async {
+  void addMsg(String msg, String username, int avatar, bool self) async {
     ListTile tt = ListTile(
         title: StarRailMessageLine(
             avatar: await AvatarManager.request(avatar),
-            self: self,
-            username: username,
-            text: msg,
-            msgResv: false,
-            onLoadComplete: () {
-              setState(() {
-                key.currentState!.scrollToBottom();
-              });
-            }));
-
-    setState(() => key.currentState!.pushMsg(tt));
-  }
-
-  void addMsg(String msg, String username, String avatar, bool self) async {
-    ListTile tt = ListTile(
-        title: StarRailMessageLine(
-            avatar: Image.asset("assets/avatars/$avatar.png",
-                width: 50.0, height: 50.0),
             self: self,
             username: username,
             text: msg,

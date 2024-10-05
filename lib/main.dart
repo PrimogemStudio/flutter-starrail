@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_starrail/chat_main_page.dart';
 import 'package:flutter_starrail/network/avatar_manager.dart';
 import 'package:flutter_starrail/network/socket.dart';
 import 'package:flutter_starrail/packs/starrail_button.dart';
@@ -14,6 +15,7 @@ void main() {
 class LoginScreen extends StatelessWidget {
   final username = TextEditingController();
   final password = TextEditingController();
+  var init = true;
 
   LoginScreen({super.key});
 
@@ -41,38 +43,89 @@ class LoginScreen extends StatelessWidget {
                 style: srStyle,
                 child: Text('登录'),
                 onPressed: () async {
-                  await socketConnect();
-                  handlePacker(RecvAvatarPacket, AvatarManager.handle);
+                  if (init) {
+                    init = false;
+                    try {
+                      await socketConnect();
+                    } catch (e) {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: Text('连接服务器失败'),
+                            content: Text(e.toString()),
+                            actions: <Widget>[
+                              TextButton(
+                                child: Text('确认'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    }
+                    handlePacker(RecvAvatarPacket, AvatarManager.handle);
+                    handlePacker(LoginResultPacket, (packet) {
+                      packet as LoginResultPacket;
+                      if (packet.type == 0) {
+                        currentUser = username.text;
+                        currentAvatar = packet.avatar;
+                        Navigator.pushReplacement(
+                            context,
+                            PageRouteBuilder(
+                                transitionDuration:
+                                    Duration(milliseconds: 1000),
+                                pageBuilder:
+                                    (context, animation, secondaryAnimation) =>
+                                        ChatIndeterminatePage(),
+                                transitionsBuilder: (context, animation,
+                                    secondaryAnimation, child) {
+                                  var a = CurvedAnimation(
+                                      parent: animation,
+                                      curve: Curves.easeOutExpo,
+                                      reverseCurve: Curves.easeOutExpo);
+                                  return FadeTransition(
+                                      opacity:
+                                          Tween<double>(begin: 0.0, end: 1.0)
+                                              .animate(a),
+                                      child: SlideTransition(
+                                          position: Tween<Offset>(
+                                                  begin: Offset(1.0, 0.0),
+                                                  end: Offset(0.0, 0.0))
+                                              .animate(a),
+                                          child: child));
+                                }));
+                      } else {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: Text('登录失败'),
+                              content: Text(packet.message),
+                              actions: <Widget>[
+                                TextButton(
+                                  child: Text('确认'),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      }
+                    });
+                  }
                   socketSend(LoginPacket(
                       username: username.text, password: password.text));
-                  Navigator.pushReplacement(
-                      context,
-                      PageRouteBuilder(
-                          transitionDuration: Duration(milliseconds: 1000),
-                          pageBuilder:
-                              (context, animation, secondaryAnimation) =>
-                                  ChatIndeterminatePage(),
-                          transitionsBuilder:
-                              (context, animation, secondaryAnimation, child) {
-                            var a = CurvedAnimation(
-                                parent: animation,
-                                curve: Curves.easeOutExpo,
-                                reverseCurve: Curves.easeOutExpo);
-                            return FadeTransition(
-                                opacity: Tween<double>(begin: 0.0, end: 1.0)
-                                    .animate(a),
-                                child: SlideTransition(
-                                    position: Tween<Offset>(
-                                            begin: Offset(1.0, 0.0),
-                                            end: Offset(0.0, 0.0))
-                                        .animate(a),
-                                    child: child));
-                          }));
                 })
           ])),
     ));
     return ClipRRect(
-        borderRadius: const BorderRadius.only(topRight: Radius.circular(30)), child: i);
+        borderRadius: const BorderRadius.only(topRight: Radius.circular(30)),
+        child: i);
   }
 }
 
