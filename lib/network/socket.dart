@@ -92,13 +92,28 @@ class RecvMessagePacket implements Packet {
 }
 
 class RecvAvatarPacket implements Packet {
-  late int id;
+  int id = 0;
+  int type = 0;
+  int size = 0;
   late Uint8List data;
 
   RecvAvatarPacket(Uint8List data) {
     var view = data.buffer.asByteData();
     id = view.getUint16(1, Endian.host);
-    this.data = data.buffer.asUint8List(3);
+    type = view.getUint8(3);
+    if (type == 1) {
+      size = view.getUint32(4, Endian.host);
+      this.data = Uint8List(0);
+      return;
+    } else if (type == 2) {
+      this.data = data.buffer.asUint8List(4, 1024);
+      return;
+    } else if (type == 3) {
+      size = view.getUint32(4, Endian.host);
+      this.data = data.buffer.asUint8List(8, size);
+      return;
+    }
+    data = Uint8List(0);
   }
 
   @override
