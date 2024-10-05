@@ -29,12 +29,6 @@ class ChatIndeterminatePageState extends State<ChatIndeterminatePage>
   @override
   void initState() {
     super.initState();
-    chatMessageListKey.currentState!.userListKey.currentState!
-        .pushMsg(ListTile(title: StarRailUserObject()));
-    headerKey.currentState!.updateText(() {
-      headerKey.currentState!.widget.replyer = "聊天频道";
-      headerKey.currentState!.widget.withDesc = false;
-    });
     widget.mainAnimation = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 250));
   }
