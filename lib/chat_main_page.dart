@@ -31,7 +31,7 @@ class ChatMainPageState extends State<ChatMainPage>
   void addRecvMsg(String msg, String username, int avatar, bool self) async {
     ListTile tt = ListTile(
         title: StarRailMessageLine(
-            avatar: AvatarManager.avatars[avatar]!,
+            avatar: await AvatarManager.request(avatar),
             self: self,
             username: username,
             text: msg,

@@ -56,6 +56,21 @@ class SendMessagePacket implements Packet {
   }
 }
 
+class RequestAvatarPacket implements Packet {
+  int id;
+
+  RequestAvatarPacket({required this.id});
+
+  @override
+  void write(Socket socket) {
+    var buf = ByteData(3);
+    var byteView = buf.buffer.asUint8List();
+    buf.setUint8(0, 3);
+    buf.setUint16(1, id, Endian.host);
+    socket.add(byteView);
+  }
+}
+
 class RecvMessagePacket implements Packet {
   late String message;
   late String user;
