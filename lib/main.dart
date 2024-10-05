@@ -18,7 +18,7 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    var i = Scaffold(
         body: Center(
       child: SizedBox(
           width: MediaQuery.of(context).size.width / 2,
@@ -69,6 +69,8 @@ class LoginScreen extends StatelessWidget {
                 })
           ])),
     ));
+    return ClipRRect(
+        borderRadius: const BorderRadius.only(topRight: Radius.circular(30)), child: i);
   }
 }
 

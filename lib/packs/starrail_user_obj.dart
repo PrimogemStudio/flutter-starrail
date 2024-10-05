@@ -23,7 +23,7 @@ class StarRailUserObjectState extends State<StarRailUserObject> {
     return FadeTransition(opacity: widget.animation!, child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
       Image.asset("assets/avatars/jack253-png.png",
           width: 50.0, height: 50.0),
-      Padding(padding: EdgeInsets.only(left: 20), child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Padding(padding: EdgeInsets.only(left: 10), child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Text("Coder2"),
         Text("Test!", style: TextStyle(color: uiMsgSrc))
       ])), 
