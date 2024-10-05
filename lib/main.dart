@@ -8,7 +8,7 @@ import 'package:flutter/scheduler.dart' show timeDilation;
 
 void main() {
   timeDilation = 1.5;
-  runApp(const MyApp());
+  runApp(ClipRRect(borderRadius: const BorderRadius.only(topRight: Radius.circular(30)), child: const MyApp()));
 }
 
 class LoginScreen extends StatelessWidget {
@@ -19,7 +19,7 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var i = Scaffold(
+    return Scaffold(
         body: Center(
       child: SizedBox(
           width: MediaQuery.of(context).size.width / 2,
@@ -71,8 +71,6 @@ class LoginScreen extends StatelessWidget {
                 })
           ])),
     ));
-    return ClipRRect(
-        borderRadius: const BorderRadius.only(topRight: Radius.circular(30)), child: i);
   }
 }
 

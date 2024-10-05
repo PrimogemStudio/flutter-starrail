@@ -16,6 +16,7 @@ class ChatIndeterminatePage extends StatefulWidget {
   });
 
   AnimationController? mainAnimation;
+  Animation<Offset>? offsetAnimation;
 
   @override
   State<StatefulWidget> createState() => ChatIndeterminatePageState();
@@ -35,6 +36,13 @@ class ChatIndeterminatePageState extends State<ChatIndeterminatePage> with Ticke
     widget.mainAnimation!.addListener(() {
       setState(() {});
     });
+
+    widget.offsetAnimation = Tween<Offset>(begin: const Offset(-0.15, 0), end: const Offset(0, 0))
+        .animate(CurvedAnimation(
+        parent: widget.mainAnimation!,
+        curve: Curves.easeOutExpo,
+        reverseCurve: Curves.easeOutExpo));
+
     widget.mainAnimation!.forward();
   }
 
@@ -51,7 +59,7 @@ class ChatIndeterminatePageState extends State<ChatIndeterminatePage> with Ticke
         body: Stack(
           children: [
             ChatMainPage(key: mainPageKey),
-            IgnorePointer(ignoring: widget.mainAnimation!.value == 0, child: FadeTransition(opacity: widget.mainAnimation!, child: ChatMessageListPage(key: chatMessageListKey)))
+            IgnorePointer(ignoring: widget.mainAnimation!.value == 0, child: SlideTransition(position: widget.offsetAnimation!, child: FadeTransition(opacity: widget.mainAnimation!, child: ChatMessageListPage(key: chatMessageListKey))))
           ]
         ),
         appBar: AppBar(
@@ -68,13 +76,6 @@ class ChatIndeterminatePageState extends State<ChatIndeterminatePage> with Ticke
               heroTag: "a",
               child: const Icon(Icons.add)
           )),
-          withPadding(FloatingActionButton(
-              onPressed: () {
-                headerKey.currentState!.updateText(() {});
-              },
-              tooltip: '测试 Header',
-              heroTag: "b",
-              child: const Icon(Icons.edit))),
           withPadding(FloatingActionButton(heroTag: "c", onPressed: () {
             showSrDialog(context, (x) { updateBlur(x); });
           })),
@@ -85,6 +86,7 @@ class ChatIndeterminatePageState extends State<ChatIndeterminatePage> with Ticke
           withPadding(FloatingActionButton(heroTag: "e", onPressed: () {
             setState(() {
               widget.mainAnimation!.value == 0 ? widget.mainAnimation!.forward() : widget.mainAnimation!.reverse();
+              headerKey.currentState!.updateText(() {});
             });
           }))
         ]));
