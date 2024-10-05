@@ -44,11 +44,12 @@ class ChatIndeterminatePageState extends State<ChatIndeterminatePage> with Ticke
 
   @override
   Widget build(BuildContext context) {
+    print(widget.mainAnimation!.value == 0);
     Scaffold sc = Scaffold(
         body: Stack(
           children: [
             ChatMainPage(key: mainPageKey),
-            IgnorePointer(child: FadeTransition(opacity: widget.mainAnimation!, child: ChatMessageListPage(key: chatMessageListKey)))
+            IgnorePointer(ignoring: widget.mainAnimation!.value != 0, child: FadeTransition(opacity: widget.mainAnimation!, child: ChatMessageListPage(key: chatMessageListKey)))
           ]
         ),
         appBar: AppBar(
