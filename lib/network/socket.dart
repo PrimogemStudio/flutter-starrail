@@ -107,6 +107,39 @@ class RecvAvatarPacket implements Packet {
   }
 }
 
+class LoginResultPacket implements Packet {
+  late int type;
+  late String message;
+
+  LoginResultPacket(Uint8List data) {
+    var view = data.buffer.asByteData();
+    type = view.getUint8(1);
+    message = utf8.decode(data.buffer.asUint8List(1));
+  }
+
+  @override
+  void write(Socket socket) {
+    throw UnimplementedError("unsupported");
+  }
+}
+
+class ChoiceChannelPacket implements Packet {
+  late String channel;
+  late String desc;
+
+  ChoiceChannelPacket(Uint8List data) {
+    var view = data.buffer.asByteData();
+    var size = view.getUint32(1, Endian.host);
+    channel = utf8.decode(data.buffer.asUint8List(5, size));
+    desc = utf8.decode(data.buffer.asUint8List(5 + size));
+  }
+
+  @override
+  void write(Socket socket) {
+    throw UnimplementedError("unsupported");
+  }
+}
+
 void handlePacker(Type type, void Function(Packet) callback) {
   handlers.add(Handler(type: type, callback: callback));
 }
@@ -127,6 +160,16 @@ Future<void> socketConnect() async {
         var p = RecvAvatarPacket(data);
         for (var h in handlers) {
           if (h.type == RecvAvatarPacket) h.callback(p);
+        }
+      case 3:
+        var p = LoginResultPacket(data);
+        for (var h in handlers) {
+          if (h.type == LoginResultPacket) h.callback(p);
+        }
+      case 4:
+        var p = ChoiceChannelPacket(data);
+        for (var h in handlers) {
+          if (h.type == ChoiceChannelPacket) h.callback(p);
         }
     }
   });
